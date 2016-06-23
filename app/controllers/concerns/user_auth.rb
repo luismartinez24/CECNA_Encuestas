@@ -1,4 +1,6 @@
-module ApplicationHelper
+module UserAuth
+	extend ActiveSupport::Concern
+
 	def user_signed_in?
 		!current_user.nil?
 	end

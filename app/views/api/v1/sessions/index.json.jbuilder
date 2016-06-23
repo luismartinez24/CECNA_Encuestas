@@ -1,0 +1,1 @@
+json.set! :to, url_for(request.protocol+request.host_with_port+'/inicio')

@@ -15,7 +15,12 @@
 			<ul class="right hide-on-med-and-down">
 				<li><a href="sass.html"><i class="material-icons left">view_list</i>FAQ</a></li>
 				<li><a href="badges.html"><i class="material-icons left">assignment</i>Encuesta</a></li>
-
+				<% if user_signed_in? %>
+					<li>
+					<%= link_to(api_v1_logout_path, method: :delete) do %>
+						<i class="material-icons left">input</i> Cerra sesión
+					<% end %>
+				<% end %>
 			</ul>
 		</div>
 	</div>
