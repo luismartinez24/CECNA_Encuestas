@@ -12,8 +12,7 @@ angular.module("Controller",[])
 		signin: function() {
 			auth.login({'user':$scope.AuthData.user,'password':$scope.AuthData.password})
 			.success(function(data) {
-				console.log(data);
-				//$scope.create(data,'Login',ToDoService,$timeout);
+				$scope.create(data,'Login',ToDoService,$timeout);
 			})
 			.error(function(data, status) {
 				ToDoService.msg($scope,$timeout, ToDoService);
