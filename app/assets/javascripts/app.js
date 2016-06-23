@@ -1,1 +1,1 @@
-var SEEM = angular.module('SEEM',['Controller','Constants','Factories','ToDoService','ngResource']);
+var SEEM = angular.module('SEEM',['Controller','Constants','Factories','ToDoService','ngResource','ngSanitize']);

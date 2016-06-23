@@ -18,3 +18,6 @@
 //= require angular-animate
 //= require angular-resource
 //= require_tree .
+// Bower packages
+//= require angular-sanitize/angular-sanitize
+//
