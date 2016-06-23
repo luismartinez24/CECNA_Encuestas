@@ -1,14 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Encuestas</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
+	<title>Encuestas</title>
+	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<%= csrf_meta_tags %>
+	<%= favicon_link_tag 'favicon.ico' %>
 </head>
-<body>
+<body ng-app="SEEM" class="grey lighten-3">
+<nav>
+	<div class="navbar-fixed">
+		<div class="nav-wrapper blue-grey darken-2">
+			<a href="#!" class="brand-logo"></a>
+			<ul class="right hide-on-med-and-down">
+				<li><a href="sass.html"><i class="material-icons left">view_list</i>FAQ</a></li>
+				<li><a href="badges.html"><i class="material-icons left">assignment</i>Encuesta</a></li>
 
-<%= yield %>
-
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container">
+	<div class="center padding">
+		<%= image_tag("cecna.png",size: "200x80") %>
+	</div>
+	<%= yield %>
+</div>
+<footer class="page-footer blue-grey darken-3">
+	<div class="container">
+		<div class="row">
+			<div class="col l6 s12">
+				<h5 class="white-text">Footer Content</h5>
+				<p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+			</div>
+			<div class="col l4 offset-l2 s12">
+				<h5 class="white-text">Menú</h5>
+				<ul>
+					<li><a class="grey-text text-lighten-3" href="#!">FAQ</a></li>
+					<li><a class="grey-text text-lighten-3" href="#!">Encuesta</a></li>
+					<li><a class="grey-text text-lighten-3" href="#!">SIGAE</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="footer-copyright">
+		<div class="container">
+			© 2016 Copyright Slam24
+			<a class="grey-text text-lighten-4 right" href="#!">SIGAE</a>
+		</div>
+	</div>
+</footer>
 </body>
 </html>
