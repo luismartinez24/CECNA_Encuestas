@@ -11,13 +11,20 @@
 // about supported directives.
 //
 //= require jquery
-//= require materialize-sprockets
+//= require jquery.turbolinks
 //= require jquery_ujs
-//= require turbolinks
+//= require materialize-sprockets
 //= require angular
 //= require angular-animate
 //= require angular-resource
-//= require_tree .
 // Bower packages
 //= require angular-sanitize/angular-sanitize
+//= require turbolinks
+//= require_tree .
 //
+$(document).on('page:fetch', function() {
+  $(".progress").show();
+});
+$(document).on('page:change', function() {
+  $(".progress").hide();
+});

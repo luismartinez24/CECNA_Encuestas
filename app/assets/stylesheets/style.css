@@ -5,3 +5,28 @@
 	padding-top: 20px;
 	padding-bottom: 0px;
 }
+.loading-alert {
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    top: 10px;
+    z-index: 1000;
+    height: 40px;
+}
+.white-text {
+    color: #FFFFFF !important;
+}
+.blue {
+    background-color: #26a69a !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.large-padding {
+    padding: 10px 15px;
+}
+.z-depth-3 {
+    -webkit-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    -moz-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}

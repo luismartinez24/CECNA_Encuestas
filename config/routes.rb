@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 	get "/", to: "session#index"
+	get "/faq", to: "faq#index"
 	get "/inicio", to: "wellcome#index"
 	namespace :api, defaults: { format: "json" } do
 	namespace :v1 do
