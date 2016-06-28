@@ -5,6 +5,10 @@
 	padding-top: 20px;
 	padding-bottom: 0px;
 }
+.paddingcard{
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
 .loading-alert {
     position: absolute;
     width: 60%;
@@ -29,4 +33,14 @@
     -webkit-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
     -moz-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
     box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.ticket{
+    display: inline-block;
+    margin-top: 0px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
 }

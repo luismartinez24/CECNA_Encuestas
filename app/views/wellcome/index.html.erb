@@ -1,5 +1,47 @@
-<div class="row center">
-	<% if user_signed_in?%>
-		<%= current_user.username %>
-	<% end %>
+<div class="row center" ng-controller="polls">
+	<div ng-repeat="obj in getPolls">
+		<div class="col m4">
+			<div class="card">
+				<div class="card-image waves-effect waves-block waves-light" style="background:#26a69a; height: 80px;">
+					<i class="medium material-icons paddingcard">assignment</i>
+				</div>
+				<div class="card-content">
+					<span class="white-text activator grey-text text-darken-3"><strong>{{ obj.attributes.title | limitTo: 40 }}{{ obj.attributes.title.length > 40 ? '...' : '' }}</strong><i class="material-icons right">more_vert</i></span>
+					<p style="text-align: left;">Código:  {{ obj.attributes.code }}</p>
+					<span ng-if="date(obj.attributes.expires_at)">
+						<p class="red lighten-2" style="text-align: left; border-radius: 0.4em;">Fecha de expiración: {{ obj.attributes.expires_at | date:'MM-dd-yyyy'}}</p>
+					</span>
+					<span ng-if="!date(obj.attributes.expires_at)">
+						<p style="text-align: left; border-radius: 0.4em;">Fecha de expiración: {{ obj.attributes.expires_at | date:'MM-dd-yyyy'}}</p>
+					</span>
+				</div>
+				<div class="card-action">
+					<div class="row">
+						<center>
+							<div class="col m6">
+								<span ng-if="obj.attributes.status == 0">
+									<p class="amber lighten-1 ticket">En edición</p>
+								</span>
+								<span ng-if="obj.attributes.status == 1">
+									<p class="green lighten-1 card-title" style="padding: 0px">Activa</p>
+								</span>
+								<span ng-if="obj.attributes.status == 2">
+									<p class="deep-orange darkn-1 card-title" style="padding: 0px">Cancelada</p>
+								</span>
+							</div>
+							<div class="col m6">
+								<div class="chip">
+									{{ obj.attributes.created_at | timeAgo}}
+								</div>
+							</div>
+						</center>
+					</div>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+					<p>Here is some more information about this product that is only revealed once clicked on.</p>
+				</div>
+			</div>
+		</div>		
+	</div>
 </div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head lang='es_ES'>
 	<title>Encuestas</title>
 	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
 	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -15,17 +15,21 @@
 <nav>
 	<div class="navbar-fixed">
 		<div class="nav-wrapper blue-grey darken-2">
-			<a href="#!" class="brand-logo"></a>
+			<% if user_signed_in? %>
+				<a href="#!" class="brand-logo center"><%= image_tag(current_user.path ,size: "45x45",class: "circle", style: "margin-top:20%") %></a>
+			<% end %>
 			<ul class="right hide-on-med-and-down">
 				<li><a href="/inicio"><i class="material-icons left">home</i>Inicio</a></li>
 				<li><a href="/faq"><i class="material-icons left">view_list</i>FAQ</a></li>
 				<li><a href="badges.html"><i class="material-icons left">assignment</i>Encuesta</a></li>
 				<% if user_signed_in? %>
 					<li>
-					<%= link_to(api_v1_logout_path, method: :delete) do %>
-						<i class="material-icons left">input</i> Cerra sesión
-					<% end %>
+						<%= link_to(api_v1_logout_path, method: :delete) do %>
+							<i class="material-icons left">input</i> Cerra sesión
+						<% end %>
+					</li>
 				<% end %>
+
 			</ul>
 		</div>
 	</div>

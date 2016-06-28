@@ -1,5 +1,5 @@
 angular.module("ToDoService",[])
-.service("ToDoService", [ 'login',function(login){
+.service("ToDoService", [ 'login','poll',function(login,poll){
 
 	this.msg = function($scope,$timeout, ToDoService){
 
@@ -72,6 +72,17 @@ angular.module("ToDoService",[])
 						window.location.href = data.data.to;
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
+					});
+
+				};
+			},
+			getAll: function(entity,option,ToDoService,$timeout,id){
+				if (entity == 'Encuestas') {
+
+					poll.query({'option':option}, function(data){
+						$scope.getPolls =  data.data;
+					}, function(data){
+						$scope.errors(data,ToDoService,$timeout);
 					});
 
 				};

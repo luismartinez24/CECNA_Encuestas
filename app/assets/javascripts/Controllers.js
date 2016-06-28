@@ -35,4 +35,36 @@ angular.module("Controller",[])
 		}
 	});
 
+}])
+.controller("polls",['$scope','ToDoService','$timeout','$filter',function($scope,ToDoService,$timeout,$filter){
+
+	ToDoService.msg($scope,$timeout, ToDoService);
+	ToDoService.http($scope,$timeout, ToDoService);
+
+	angular.extend($scope, {
+		AuthData: {}
+	});
+
+	$scope.getAll('Encuestas','',ToDoService,$timeout,'');
+
+	angular.extend($scope,{
+		date: function(date){
+			var expired = '';
+			var current = '';
+
+			var fecha = new Date();
+			current = $filter('date')(fecha, 'yyyy-MM-dd');
+
+			var dateOut = new Date(date);
+			dateOut.setDate(dateOut.getDate() + 1);
+			expired = $filter('date')(dateOut, 'yyyy-MM-dd');
+
+			if (current > expired) {
+				return true;
+			};
+
+
+		}
+	});
+
 }]);

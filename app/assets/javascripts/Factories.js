@@ -15,4 +15,9 @@ angular.module("Factories",[])
 	return $resource(Constants.URL_API+'sessions/:sessions',{},{
 		save: {method:'POST'}
 	});
+}])
+.factory("poll", ['$resource','Constants' ,function($resource,Constants){
+	return $resource(Constants.URL_API+'polls/:polls',{},{
+		query: { method:'GET', isArray: false }
+	});
 }]);

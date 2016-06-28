@@ -19,6 +19,7 @@
 //= require angular-resource
 // Bower packages
 //= require angular-sanitize/angular-sanitize
+//= require angular-timeago/dist/angular-timeago
 //= require turbolinks
 //= require_tree .
 //

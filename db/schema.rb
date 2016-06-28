@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160623035933) do
+ActiveRecord::Schema.define(version: 20160626002041) do
+
+  create_table "my_polls", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "expires_at"
+    t.string   "title"
+    t.text     "description"
+    t.string   "code"
+    t.string   "color"
+    t.integer  "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "uid"
