@@ -1,23 +1,25 @@
 class MyPoll < ActiveRecord::Base
-	belongs_to :user
+    belongs_to :user
 
-	validates :user, presence: true
-	validates :expires_at, presence: true
-	validates :title, presence: true
-	validates :description, presence: true
-	validates :color, presence: true
+    validates :user, presence: true
+    validates :expires_at, presence: true
+    validates :title, presence: true
+    validates :description, presence: true
+    validates :color, presence: true
 
-	before_create :generate_code
-	before_save :default_values
+    has_many :sections
 
-	def default_values
-		self.status ||= 0
-	end
+    before_create :generate_code
+    before_save :default_values
 
-	def generate_code
-		begin
-			self.code = SecureRandom.hex(5)
-		end while MyPoll.where(code: self.code).any?
-	end
+    def default_values
+        self.status ||= 0
+    end
+
+    def generate_code
+        begin
+            self.code = SecureRandom.hex(5)
+        end while MyPoll.where(code: self.code).any?
+    end
 
 end

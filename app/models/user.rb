@@ -1,8 +1,9 @@
 class User < ActiveRecord::Base
 	validates :email, presence: true, email: true, uniqueness: true
-	validates :uid, presence: true, uniqueness: true
+	validates :uid, presence: true, uniqueness: true, numericality: { only_integer: true }
 	validates :username, presence: true, uniqueness: true
 	validates :path, presence: true
+
 	has_many :my_polls
 
 	def self.from_cecna(data)
