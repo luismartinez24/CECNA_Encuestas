@@ -69,6 +69,7 @@ angular.module("ToDoService",[])
 			create: function(data,entity,ToDoService,$timeout,id){
 				if (entity == 'Login') {
 					login.save(data, function(data){
+						$scope.loading = false;
 						window.location.href = data.data.to;
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
@@ -86,7 +87,7 @@ angular.module("ToDoService",[])
 					});
 
 				};
-			}			
+			}
 		});
 	}
 }]);

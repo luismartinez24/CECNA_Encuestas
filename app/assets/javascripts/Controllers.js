@@ -5,11 +5,13 @@ angular.module("Controller",[])
     ToDoService.http($scope,$timeout, ToDoService);
 
     angular.extend($scope, {
-        AuthData: {}
+        AuthData: {},
+        loading: false
     });
 
     angular.extend($scope, {
         signin: function() {
+            $scope.loading = true;
             auth.login({'user':$scope.AuthData.user,'password':$scope.AuthData.password})
             .success(function(data) {
                $scope.create(data,'Login',ToDoService,$timeout);
