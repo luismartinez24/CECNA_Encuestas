@@ -3,7 +3,8 @@
     "name": "bower-rails generated lib assets",
     "dependencies": {
       "angular-sanitize":"1.5.1",
-      "angular-timeago":"0.4.3"
+      "angular-timeago":"0.4.3",
+      "spectrum":""
     }
   },
   "vendor": {

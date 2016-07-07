@@ -50,8 +50,10 @@ angular.module("ToDoService",[])
 					$scope.msgdanger = false;
 					$scope.msg = 'Error de servidor interno. intente de nuevo o consulte al administrador de sitio';
 					$scope.msgclose($timeout, ToDoService);
-				} else{
-					$scope.errorMessages = data;
+				};
+				if (data.status == 422) {
+					$scope.errorMessages = data.data.errors;
+					console.log($scope.errorMessages);
 				};
 			},
 			errors: function(data,ToDoService,$timeout){
@@ -61,12 +63,13 @@ angular.module("ToDoService",[])
 					$scope.msg = 'Error de servidor interno. intente de nuevo o consulte al administrador de sitio';
 					$scope.msgclose($timeout, ToDoService);
 				};
-			},
+			}
 		});
 	},
 	this.http = function($scope,$timeout, ToDoService){
+		ToDoService.msg($scope,$timeout, ToDoService);
 		angular.extend($scope,{
-			create: function(data,entity,ToDoService,$timeout,id){
+			create: function(data,entity,id){
 				if (entity == 'Login') {
 					login.save(data, function(data){
 						$scope.loading = false;
@@ -74,10 +77,17 @@ angular.module("ToDoService",[])
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
+				};
 
+				if (entity == 'poll') {
+					poll.save(data, function(data){
+
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
 				};
 			},
-			getAll: function(entity,option,ToDoService,$timeout,id){
+			getAll: function(entity,option,id){
 				if (entity == 'Encuestas') {
 
 					poll.query({'option':option}, function(data){

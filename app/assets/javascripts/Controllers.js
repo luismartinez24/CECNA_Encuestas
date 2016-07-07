@@ -14,7 +14,7 @@ angular.module("Controller",[])
             $scope.loading = true;
             auth.login({'user':$scope.AuthData.user,'password':$scope.AuthData.password})
             .success(function(data) {
-               $scope.create(data,'Login',ToDoService,$timeout);
+               $scope.create(data,'Login');
             })
             .error(function(data, status) {
                ToDoService.msg($scope,$timeout, ToDoService);
@@ -47,7 +47,7 @@ angular.module("Controller",[])
         AuthData: {}
     });
 
-    $scope.getAll('Encuestas','',ToDoService,$timeout,'');
+    $scope.getAll('Encuestas','user',ToDoService,$timeout,'');
 
     angular.extend($scope,{
         date: function(date){
@@ -64,6 +64,28 @@ angular.module("Controller",[])
             if (current > expired) {
                 return true;
             };
+        }
+    });
+
+}])
+.controller("poll",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
+
+    ToDoService.http($scope,$timeout, ToDoService);
+
+    angular.extend($scope,{
+        CreateData:{
+            poll:{
+                description:'',
+                color: '#26a69a'
+            }
+        }
+    });
+
+    angular.extend($scope,{
+        save: function(CreateData){
+            $scope.CreateData = CreateData;
+            $scope.CreateData.poll.description =  CKEDITOR.instances['poll_description'].getData();
+            $scope.create($scope.CreateData,'poll');
         }
     });
 

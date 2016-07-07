@@ -1,13 +1,14 @@
+.blue {
+    background-color: #26a69a !important;
+}
 .center{
-	text-align: center;
+    text-align: center;
 }
-.padding{
-	padding-top: 20px;
-	padding-bottom: 0px;
+code{
+    color: red;
 }
-.paddingcard{
-    padding-top: 10px;
-    padding-bottom: 0px;
+.large-padding {
+    padding: 10px 15px;
 }
 .loading-alert {
     position: absolute;
@@ -17,22 +18,16 @@
     z-index: 1000;
     height: 40px;
 }
-.white-text {
-    color: #FFFFFF !important;
+.padding{
+    padding-top: 20px;
+    padding-bottom: 0px;
 }
-.blue {
-    background-color: #26a69a !important;
+.paddingcard{
+    padding-top: 10px;
+    padding-bottom: 0px;
 }
 .text-center {
     text-align: center !important;
-}
-.large-padding {
-    padding: 10px 15px;
-}
-.z-depth-3 {
-    -webkit-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-    -moz-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-    box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
 .ticket{
     display: inline-block;
@@ -43,4 +38,12 @@
     font-size: 14px;
     height: 32px;
     line-height: 32px;
+}
+.white-text {
+    color: #FFFFFF !important;
+}
+.z-depth-3 {
+    -webkit-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    -moz-box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }

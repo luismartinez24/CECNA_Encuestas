@@ -20,6 +20,8 @@
 // Bower packages
 //= require angular-sanitize/angular-sanitize
 //= require angular-timeago/dist/angular-timeago
+//= require ckeditor/init
+//= require spectrum/spectrum
 //= require turbolinks
 //= require_tree .
 //

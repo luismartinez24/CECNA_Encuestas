@@ -18,6 +18,7 @@ angular.module("Factories",[])
 }])
 .factory("poll", ['$resource','Constants' ,function($resource,Constants){
 	return $resource(Constants.URL_API+'polls/:polls',{},{
-		query: { method:'GET', isArray: false }
+		query: { method:'GET', isArray: false },
+		save: {method:'POST'}
 	});
 }]);

@@ -30,6 +30,7 @@ gem 'materialize-sass', '~> 0.97.6'
 gem 'material_icons', '~> 2.2.0'
 gem 'angularjs-rails', '~> 1.5.6'
 gem "bower-rails", "~> 0.10.0"
+gem "ckeditor", "~> 4.1.6"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

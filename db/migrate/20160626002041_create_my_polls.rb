@@ -7,7 +7,7 @@ class CreateMyPolls < ActiveRecord::Migration
       t.text :description
       t.string :code
       t.string :color
-      t.integer :status #0->en edicion, 1->activa, 3->cancelada
+      t.integer :status #0->en edicion, 1->activa, 2->cancelada, 3->desacticada
       t.timestamps null: false
     end
   end

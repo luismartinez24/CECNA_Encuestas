@@ -3,7 +3,11 @@ class Api::V1::MyPollsController < Api::V1::MasterApiController
     before_action :set_poll, only: [:show]
 
     def index
-        @polls = MyPoll.where(user_id: @current_user)
+        if params[:option] == 'user'
+            @polls = MyPoll.where(user_id: @current_user)
+        else
+            @polls = MyPoll.all
+        end
     end
     def show
     end
@@ -12,14 +16,14 @@ class Api::V1::MyPollsController < Api::V1::MasterApiController
         if @poll.save
             render template: "api/v1/my_polls/show"
         else
-            error_array!(@poll.errors.full_messages,:unprocessable_entity)
+            error_array!(@poll.errors,:unprocessable_entity)
         end
     end
 
     private
 
     def my_polls_params
-        params.require(:poll).permit(:title,:description,:expires_at,:color,:status)
+        params.require(:poll).permit(:title,:description,:expires_at,:color,:status,:option)
     end
     def set_poll
         @poll = MyPoll.find_by_id(params[:id])
