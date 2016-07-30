@@ -14,4 +14,5 @@
  *= require_self
  *= require material_icons
  *= require spectrum/spectrum
+ *= require ng-sortable/dist/ng-sortable
  */

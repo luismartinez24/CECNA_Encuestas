@@ -10,9 +10,9 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
         if @poll.user == @current_user
             @section = @poll.sections.new(sections_params)
             if @section.save
-                head :ok
+                 render template: "api/v1/sections/show"
             else
-                error_array!(@section.errors.full_messages,:unprocessable_entity)
+                error_array!(@section.errors,:unprocessable_entity)
             end
         else
             error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)

@@ -1,5 +1,5 @@
 class MyPollController < ApplicationController
-	before_action :authenticate_user!, only: [:index, :create]
+	before_action :authenticate_user!, only: [:index, :new]
 	def index
 	end
 	def new		

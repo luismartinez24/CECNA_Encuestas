@@ -22,6 +22,7 @@
 //= require angular-timeago/dist/angular-timeago
 //= require ckeditor/init
 //= require spectrum/spectrum
+//= require ng-sortable/dist/ng-sortable
 //= require turbolinks
 //= require_tree .
 //

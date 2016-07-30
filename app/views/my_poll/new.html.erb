@@ -6,12 +6,12 @@
 
 				<div class="input-field">
 					<label for="name" class="">Titulo</label>
-					<input type="text" name="title" ng-model="CreateData.poll.body">
+					<input type="text" name="title" ng-model="CreateData.poll.title">
 				</div>
 				<code>{{ errorMessages.title[0] }}</code>
 
 				<p> Descripción </p>
-				<%= cktext_area :poll, :description, :cols => 40, :value => 'Describa de forma clara aspectos que caracterizan la encuesta a aplicar', :ckeditor => {:uiColor => '#455a64', :toolbar => 'mini'} %>
+				<%= cktext_area :poll, :description, :cols => 40, :value => 'Describa de forma clara aspectos que caracterizan la encuesta a aplicar', :ckeditor => {:uiColor => '#455a64', :toolbar => 'mini'}, data: { 'no-turbolink' => true } %>
 				<code>{{ errorMessages.description[0] }}</code>
 				<br />
 

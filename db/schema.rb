@@ -14,49 +14,49 @@
 ActiveRecord::Schema.define(version: 20160629041242) do
 
   create_table "my_polls", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",     limit: 4
     t.datetime "expires_at"
-    t.string   "title"
-    t.text     "description"
-    t.string   "code"
-    t.string   "color"
-    t.integer  "status"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "title",       limit: 255
+    t.text     "description", limit: 65535
+    t.string   "code",        limit: 255
+    t.string   "color",       limit: 255
+    t.integer  "status",      limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "options", force: :cascade do |t|
-    t.integer "question_id"
-    t.string  "content"
-    t.integer "rank"
+    t.integer "question_id", limit: 4
+    t.string  "content",     limit: 255
+    t.integer "rank",        limit: 4
   end
 
-  add_index "options", ["question_id"], name: "index_options_on_question_id"
+  add_index "options", ["question_id"], name: "index_options_on_question_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
-    t.integer "section_id"
-    t.string  "description"
-    t.integer "category"
-    t.integer "rank"
+    t.integer "section_id",  limit: 4
+    t.string  "description", limit: 255
+    t.integer "category",    limit: 4
+    t.integer "rank",        limit: 4
   end
 
-  add_index "questions", ["section_id"], name: "index_questions_on_section_id"
+  add_index "questions", ["section_id"], name: "index_questions_on_section_id", using: :btree
 
   create_table "sections", force: :cascade do |t|
-    t.integer "my_poll_id"
-    t.string  "name"
-    t.integer "rank"
+    t.integer "my_poll_id", limit: 4
+    t.string  "name",       limit: 255
+    t.integer "rank",       limit: 4
   end
 
-  add_index "sections", ["my_poll_id"], name: "index_sections_on_my_poll_id"
+  add_index "sections", ["my_poll_id"], name: "index_sections_on_my_poll_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "uid"
-    t.string   "username"
-    t.string   "email"
-    t.string   "path"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "uid",        limit: 255
+    t.string   "username",   limit: 255
+    t.string   "email",      limit: 255
+    t.string   "path",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
 end

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
     get "/", to: "sessions#index"
     get "/faq", to: "faq#index"
     get "/encuestas", to: "my_poll#index"
+    get "/encuestas/:polls/secciones", to: "sections#new"
     get "/encuestas/crear", to: "my_poll#new"
     namespace :api, defaults: { format: "json" } do
         namespace :v1 do

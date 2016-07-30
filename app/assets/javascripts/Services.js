@@ -1,5 +1,5 @@
 angular.module("ToDoService",[])
-.service("ToDoService", [ 'login','poll',function(login,poll){
+.service("ToDoService", [ 'login','poll','section',function(login,poll,section){
 
 	this.msg = function($scope,$timeout, ToDoService){
 
@@ -16,26 +16,10 @@ angular.module("ToDoService",[])
 				ToDoService.msg($scope);
 				}, 3000);
 			},
-			success: function(ToDoService,$timeout,entity,aux,name){
+			success: function(ToDoService,$timeout,data){
 				$scope.msgsuccess = false;
-				if (!name) {
-					$scope.msg = aux+' '+entity+' se guardo con éxito';
-				}else{
-					$scope.msg = aux+' '+entity+' "'+name+'" se guardo con éxito';
-				};
-				$scope.createData = {};
-				$scope.createDatadetail = {};
-				$scope.msgclose($timeout, ToDoService);
-			},
-			successModal: function(ToDoService,$timeout,entity,aux,name){
-				$scope.msgsuccess = false;
-				if (!name) {
-					$scope.msg = aux+' '+entity+' se guardo con éxito';
-				}else{
-					$scope.msg = aux+' '+entity+' "'+name+'" se guardo con éxito';
-				};
-				$scope.createData = {};
-				$scope.defaultTime();
+				$scope.msg = 'El recurso se creo con éxito';
+				$scope.CreateData = {};
 				$scope.msgclose($timeout, ToDoService);
 			},
 			info: function(entity,aux,status,ToDoService,$timeout){
@@ -56,20 +40,12 @@ angular.module("ToDoService",[])
 					console.log($scope.errorMessages);
 				};
 			},
-			errors: function(data,ToDoService,$timeout){
-				ToDoService.msg($scope,$timeout, ToDoService);
-				if (data.status == 500) {
-					$scope.msgdanger = false;
-					$scope.msg = 'Error de servidor interno. intente de nuevo o consulte al administrador de sitio';
-					$scope.msgclose($timeout, ToDoService);
-				};
-			}
 		});
 	},
 	this.http = function($scope,$timeout, ToDoService){
 		ToDoService.msg($scope,$timeout, ToDoService);
 		angular.extend($scope,{
-			create: function(data,entity,id){
+			create: function(data,entity,id1){
 				if (entity == 'Login') {
 					login.save(data, function(data){
 						$scope.loading = false;
@@ -86,16 +62,30 @@ angular.module("ToDoService",[])
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
-			},
-			getAll: function(entity,option,id){
-				if (entity == 'Encuestas') {
 
+				if (entity == 'section') {
+					section.save({'polls':id1},data, function(data){
+						$scope.success(ToDoService,$timeout,data);
+						$scope.getSection.push(data.data);
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+			},
+			getAll: function(entity,option,id1){
+				if (entity == 'Encuestas') {
 					poll.query({'option':option}, function(data){
 						$scope.getPolls =  data.data;
 					}, function(data){
-						$scope.errors(data,ToDoService,$timeout);
+						$scope.errorsData(data,ToDoService,$timeout);
 					});
-
+				};
+				if (entity == 'section') {
+					section.query({'option':option,'polls':id1}, function(data){
+						$scope.getSection =  data.data;
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
 				};
 			}
 		});

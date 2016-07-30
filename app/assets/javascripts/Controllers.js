@@ -70,7 +70,7 @@ angular.module("Controller",[])
 }])
 .controller("poll",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
 
-    ToDoService.http($scope,$timeout, ToDoService);
+    ToDoService.http($scope,$timeout,ToDoService);
 
     angular.extend($scope,{
         CreateData:{
@@ -86,6 +86,30 @@ angular.module("Controller",[])
             $scope.CreateData = CreateData;
             $scope.CreateData.poll.description =  CKEDITOR.instances['poll_description'].getData();
             $scope.create($scope.CreateData,'poll');
+        }
+    });
+
+}])
+.controller("seccion",['$scope','ToDoService','$timeout', function($scope,ToDoService,$timeout){
+
+    ToDoService.http($scope,$timeout,ToDoService);
+
+    angular.extend($scope,{
+        CreateData:{
+            section:{
+                name:''
+            }
+        },
+        newObj:{},
+        idvar: document.getElementById("idvar").value,
+        form: {}
+    });
+
+    $scope.getAll('section','',$scope.idvar);
+
+    angular.extend($scope,{
+        save: function(sectionForm){
+            $scope.create($scope.CreateData,'section',$scope.idvar);
         }
     });
 
