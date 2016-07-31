@@ -5,5 +5,6 @@ class CreateSections < ActiveRecord::Migration
         t.string :name
         t.integer :rank
     end
+    add_foreign_key :sections, :my_polls
   end
 end

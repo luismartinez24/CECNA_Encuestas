@@ -7,5 +7,6 @@ class CreateQuestions < ActiveRecord::Migration
             #0->respuesta parrafo, 1->seleccion
             t.integer :rank
         end
+        add_foreign_key :questions, :sections
     end
 end

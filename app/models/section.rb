@@ -4,7 +4,7 @@ class Section < ActiveRecord::Base
     validates :my_poll, presence: true
     validates :name, presence: true
 
-    has_many :questions, :dependent => :delete_all
+    has_many :questions, dependent: :destroy
 
     before_create :generate_rank
 

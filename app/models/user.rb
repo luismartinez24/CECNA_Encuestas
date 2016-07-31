@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 	validates :username, presence: true, uniqueness: true
 	validates :path, presence: true
 
-	has_many :my_polls
+	has_many :my_polls, dependent: :destroy
 
 	def self.from_cecna(data)
 		 User.where(uid: data[:uid]).first_or_create do |user|

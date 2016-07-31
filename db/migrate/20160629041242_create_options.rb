@@ -5,5 +5,6 @@ class CreateOptions < ActiveRecord::Migration
             t.string :content
             t.integer :rank
         end
+        add_foreign_key :options, :questions
     end
 end

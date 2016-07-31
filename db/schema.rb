@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 20160629041242) do
     t.datetime "updated_at",                null: false
   end
 
+  add_index "my_polls", ["user_id"], name: "index_my_polls_on_user_id", using: :btree
+
   create_table "options", force: :cascade do |t|
     t.integer "question_id", limit: 4
     t.string  "content",     limit: 255
@@ -59,4 +61,8 @@ ActiveRecord::Schema.define(version: 20160629041242) do
     t.datetime "updated_at",             null: false
   end
 
+  add_foreign_key "my_polls", "users"
+  add_foreign_key "options", "questions"
+  add_foreign_key "questions", "sections"
+  add_foreign_key "sections", "my_polls"
 end
