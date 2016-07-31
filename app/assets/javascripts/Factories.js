@@ -25,6 +25,8 @@ angular.module("Factories",[])
 .factory("section", ['$resource','Constants' ,function($resource,Constants){
 	return $resource(Constants.URL_API+'polls/:polls/sections/:sections',{},{
 		query: { method:'GET', isArray: false },
-		save: {method:'POST'}
+		save: {method:'POST'},
+		update: {method:'PUT'},
+		remove: {method:'DELETE'},
 	});
 }]);

@@ -9,6 +9,18 @@
 		<span ng-if="getSection.length == 0">
 			<div class="card-panel brown lighten-2"><span class="white-text text-darken-2"><center><b>No se ha agregado ninguna sección</b></center></span></div>
 		</span>
+		<span ng-if="getSection.length > 0">
+			<div class="card-panel brown lighten-2"><span class="white-text text-darken-2">
+				<div class="row">
+					<center>
+						<span class="flow-text">
+							<a class="waves-effect waves-light btn"><i class="material-icons right">replay</i>Recargar</a>
+							<a class="waves-effect waves-light btn" ng-click="updateList(getSection)"><i class="material-icons right">clear_all</i>Editar secciones</a>
+						</span>
+					</center>
+				</div>
+			</div>
+		</span>
 		<li ng-repeat="obj in getSection" as-sortable-item class="as-sortable-item">
 			<div as-sortable-item-handle class="as-sortable-item-handle" style="height:50px">
 				<div class="file-field input-field">
@@ -30,7 +42,7 @@
 								</div>
 								<div class="col s6">
 									<div class="btn red  darken-2">
-										<span><i class="large material-icons">delete</i></span>
+										<span ng-click="destroy(obj,getSection)"><i class="large material-icons">delete</i></span>
 									</div>
 								</div>
 							</div>
@@ -40,6 +52,7 @@
 			</div>
 		</li>
 	</ul>
+	<br >
 	<form name="form.sectionForm" novalidate="" ng-submit="save(CreateData)">
 		<div class="input-field">
 			<i class="material-icons prefix">toc</i>

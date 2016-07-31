@@ -95,6 +95,25 @@
 	$("#colorpicker").spectrum({
 		color: "#26a69a"
 	});
+	$(document).on('page:update', function(){
+		// console.log('page updated');
+	try{
+
+    var editor = CKEDITOR.instances.ckeditor;
+    if (editor) {
+
+        editor.destroy(true);
+
+    }
+		CKEDITOR.replace("ckeditor",{
+			uiColor: '#455a64',
+			toolbar: 'mini'
+		});
+
+	}catch(e){
+		
+	}
+	});
 </script>
 </footer>
 </body>

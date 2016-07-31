@@ -70,6 +70,7 @@ angular.module("Controller",[])
 }])
 .controller("poll",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
 
+    ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
 
     angular.extend($scope,{
@@ -84,7 +85,7 @@ angular.module("Controller",[])
     angular.extend($scope,{
         save: function(CreateData){
             $scope.CreateData = CreateData;
-            $scope.CreateData.poll.description =  CKEDITOR.instances['poll_description'].getData();
+            $scope.CreateData.poll.description =  CKEDITOR.instances['ckeditor'].getData();
             $scope.create($scope.CreateData,'poll');
         }
     });
@@ -92,12 +93,18 @@ angular.module("Controller",[])
 }])
 .controller("seccion",['$scope','ToDoService','$timeout', function($scope,ToDoService,$timeout){
 
+    ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
 
     angular.extend($scope,{
         CreateData:{
             section:{
                 name:''
+            }
+        },
+        UpdateData:{
+            section:{
+                rank: ''
             }
         },
         newObj:{},
@@ -107,9 +114,28 @@ angular.module("Controller",[])
 
     $scope.getAll('section','',$scope.idvar);
 
+    $scope.$watch("getSection",function ( newValue, oldValue ) {
+        if ($scope.getSection != null) {
+            for ( var i = 0; i < newValue.length; i++ ) {
+                newValue[i].attributes.rank = i+1;
+            }
+        };
+    }, true);
+
     angular.extend($scope,{
-        save: function(sectionForm){
-            $scope.create($scope.CreateData,'section',$scope.idvar);
+        save: function(CreateData){
+            $scope.create(CreateData,'section',$scope.idvar);
+        },
+        updateList: function(obj){
+            angular.forEach(obj,function(value,index){
+                $scope.update(value.attributes,'section',value.id,$scope.idvar);
+            });
+            $scope.info('posición','La','actualizó');
+        },
+        destroy: function(obj,objs){
+            var index = $scope.getSection.indexOf(obj);
+            $scope.delete('section',obj.id,$scope.idvar,index);
+            $scope.info('posición','La','elimino');
         }
     });
 

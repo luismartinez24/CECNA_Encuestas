@@ -13,16 +13,15 @@ angular.module("ToDoService",[])
 			msgclose: function($timeout, ToDoService) {
 				$scope.errorMessages = '';
 				$timeout(function(){
-				ToDoService.msg($scope);
+				ToDoService.msg($scope,$timeout, ToDoService);
 				}, 3000);
 			},
 			success: function(ToDoService,$timeout,data){
 				$scope.msgsuccess = false;
 				$scope.msg = 'El recurso se creo con éxito';
-				$scope.CreateData = {};
 				$scope.msgclose($timeout, ToDoService);
 			},
-			info: function(entity,aux,status,ToDoService,$timeout){
+			info: function(entity,aux,status){
 					ToDoService.msg($scope,$timeout, ToDoService);
 					$scope.msginfo = false;
 					$scope.msg = aux+' '+entity+' se '+status+' con éxito ';
@@ -37,7 +36,6 @@ angular.module("ToDoService",[])
 				};
 				if (data.status == 422) {
 					$scope.errorMessages = data.data.errors;
-					console.log($scope.errorMessages);
 				};
 			},
 		});
@@ -67,8 +65,32 @@ angular.module("ToDoService",[])
 					section.save({'polls':id1},data, function(data){
 						$scope.success(ToDoService,$timeout,data);
 						$scope.getSection.push(data.data);
+						$scope.CreateData.section.name = '';
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+			},
+			update: function(data,entity,id1,id2){
+				if (entity == 'section') {
+					section.update({'sections':id1,'polls':id2},data, function(data){
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+			},
+			delete: function(entity,id1,id2,index){
+				if (entity == 'section') {
+					section.remove({'sections':id1,'polls':id2}, function(data) {
+						$scope.getSection.splice(index, 1);
+						for ( var i = 0; i < $scope.getSection.length; i++ ) {
+							$scope.getSection[i].attributes.rank = i+1;
+						}
+						angular.forEach($scope.getSection,function(value,index){
+							$scope.update(value.attributes,'section',value.id,id2);
+						});
+					}, function(data){
+						$scope.errors(data,ToDoService,$timeout);
 					});
 				};
 			},

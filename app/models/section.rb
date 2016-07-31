@@ -4,11 +4,14 @@ class Section < ActiveRecord::Base
     validates :my_poll, presence: true
     validates :name, presence: true
 
-    has_many :questions
+    has_many :questions, :dependent => :delete_all
 
     before_create :generate_rank
 
     def generate_rank
         self.rank = Section.where(my_poll_id: self.my_poll_id).count + 1
-    end 
+    end
+
+   scope :rank, ->{ order("rank ASC") }
+
 end

@@ -11,7 +11,7 @@
 				<code>{{ errorMessages.title[0] }}</code>
 
 				<p> Descripción </p>
-				<%= cktext_area :poll, :description, :cols => 40, :value => 'Describa de forma clara aspectos que caracterizan la encuesta a aplicar', :ckeditor => {:uiColor => '#455a64', :toolbar => 'mini'}, data: { 'no-turbolink' => true } %>
+				<%= cktext_area :poll, :description, :cols => 40, :id => "ckeditor", :name => "ckeditor", :class => "ckeditor", :value => 'Describa de forma clara aspectos que caracterizan la encuesta a aplicar', :ckeditor => {} %>
 				<code>{{ errorMessages.description[0] }}</code>
 				<br />
 
@@ -30,7 +30,6 @@
 						</div>
 						<code>{{ errorMessages.color[0] }}</code>
 					</div>
-
 				</div>
 
 				<div class="submit">

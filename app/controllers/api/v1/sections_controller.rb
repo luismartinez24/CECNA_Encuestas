@@ -1,9 +1,10 @@
 class Api::V1::SectionsController < Api::V1::MasterApiController
     before_action :auth, only: [:create]
     before_action :set_poll
+    before_action :set_section, only: [:update, :destroy]
 
     def index
-        @sections = @poll.sections
+        @sections = @poll.sections.rank
     end
 
     def create
@@ -19,11 +20,34 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
         end
     end
 
+    def update
+        if @section.update(sections_params)
+            render template: "api/v1/sections/show"
+        else
+            error_array!(@section.errors,:unprocessable_entity)
+        end
+    end
+
+    def destroy
+        if @section.destroy
+            head :ok
+        else
+            error_array!(@section.errors,:unprocessable_entity)
+        end     
+    end
+
     private
 
     def set_poll
         @poll = MyPoll.find_by_id(params[:poll_id])
         if @poll.blank?
+            error!("Recurso no encontrado",:not_found)
+        end
+    end
+
+    def set_section
+        @section = Section.find_by_id(params[:id])
+        if @section.blank?
             error!("Recurso no encontrado",:not_found)
         end
     end
