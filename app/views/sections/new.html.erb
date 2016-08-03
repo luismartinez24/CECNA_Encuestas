@@ -1,8 +1,18 @@
+<nav class="blue-grey darken-2">
+	<div class="nav-wrapper">
+		<div class="col s12">
+			<a href="/encuestas" class="breadcrumb">Encuestas</a>
+			<a href="/encuestas/<%= @poll.id %>" class="breadcrumb"><%= @poll.title %></a>
+			<a class="breadcrumb">Secciones</a>
+		</div>
+	</div>
+</nav>
+<br/>
 <div class="" ng-controller="seccion" ng-cloak>
 	<%= render "partials/alerts" %>
 	<blockquote>
 		<h3>Lista de secciones</h3>
-		<input id="idvar" type="hidden" value="<%= @poll.id %>">
+		<input id="poll" type="hidden" value="<%= @poll.id %>">
 	</blockquote>
 	<br>
 	<ul as-sortable="sortableOptions" ng-model="getSection">
@@ -37,7 +47,7 @@
 							<div class="row">
 								<div class="col s6">
 									<div class="btn green lighten-1">
-										<span><i class="large material-icons">live_help</i></span>
+										<span ng-click="questions(obj)"><i class="large material-icons">live_help</i></span>
 									</div>
 								</div>
 								<div class="col s6">
@@ -56,8 +66,8 @@
 	<form name="form.sectionForm" novalidate="" ng-submit="save(CreateData)">
 		<div class="input-field">
 			<i class="material-icons prefix">toc</i>
-			<input type="text" ng-model="CreateData.section.name">	
-			<label for="icon_telephone">Sección</label>		
+			<input type="text" ng-model="CreateData.section.name">
+			<label for="icon_telephone">Sección</label>
 		</div>
 		<code>{{ errorMessages.name[0] }}</code>
 		<center>

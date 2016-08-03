@@ -1,5 +1,5 @@
 angular.module("ToDoService",[])
-.service("ToDoService", [ 'login','poll','section',function(login,poll,section){
+.service("ToDoService", [ 'login','poll','section','question',function(login,poll,section,question){
 
 	this.msg = function($scope,$timeout, ToDoService){
 
@@ -34,7 +34,7 @@ angular.module("ToDoService",[])
 					$scope.msg = 'Error de servidor interno. intente de nuevo o consulte al administrador de sitio';
 					$scope.msgclose($timeout, ToDoService);
 				};
-				if (data.status == 422) {
+				if (data.status == 422 || data.status == 404) {
 					$scope.errorMessages = data.data.errors;
 				};
 			},
@@ -43,7 +43,7 @@ angular.module("ToDoService",[])
 	this.http = function($scope,$timeout, ToDoService){
 		ToDoService.msg($scope,$timeout, ToDoService);
 		angular.extend($scope,{
-			create: function(data,entity,id1){
+			create: function(data,entity,id1,id2){
 				if (entity == 'Login') {
 					login.save(data, function(data){
 						$scope.loading = false;
@@ -66,6 +66,18 @@ angular.module("ToDoService",[])
 						$scope.success(ToDoService,$timeout,data);
 						$scope.getSection.push(data.data);
 						$scope.CreateData.section.name = '';
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+
+				if (entity == 'question') {
+					question.save({'polls':id1,'sections':id2},data, function(data){
+						$scope.success(ToDoService,$timeout,data);
+						$scope.CreateData.question.description = '';
+						//$scope.category = 1;
+						// $scope.getSection.push(data.data);
+						// $scope.CreateData.section.name = '';
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -94,7 +106,7 @@ angular.module("ToDoService",[])
 					});
 				};
 			},
-			getAll: function(entity,option,id1){
+			getAll: function(entity,option,id1,id2){
 				if (entity == 'Encuestas') {
 					poll.query({'option':option}, function(data){
 						$scope.getPolls =  data.data;
@@ -105,6 +117,26 @@ angular.module("ToDoService",[])
 				if (entity == 'section') {
 					section.query({'option':option,'polls':id1}, function(data){
 						$scope.getSection =  data.data;
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+				if (entity == 'question') {
+					question.query({'option':option,'polls':id1,'sections':id2}, function(data){
+						$scope.getQuestion =  data.data;
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+			},
+			getEntity: function(entity,id,option,search){
+				if (entity == 'poll') {
+					poll.get({'polls': id}, function(data){
+						$scope.pollData = data.data.attributes;
+						if (search) {
+							var url = '/contestar?option=';
+							window.location.href = url.concat(id);
+						};
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});

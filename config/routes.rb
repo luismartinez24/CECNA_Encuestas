@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
     get "/", to: "sessions#index"
     get "/faq", to: "faq#index"
+    get "/contestar", to: "resolve#index"
     get "/encuestas", to: "my_poll#index"
+    get "/encuestas/:polls", to: "my_poll#show"
     get "/encuestas/:polls/secciones", to: "sections#new"
-    get "/encuestas/crear", to: "my_poll#new"
+    get "/encuestas/:polls/secciones/:sections", to: "sections#show"
+
     namespace :api, defaults: { format: "json" } do
         namespace :v1 do
             delete "/logout", to: "sessions#destroy"
@@ -12,7 +15,7 @@ Rails.application.routes.draw do
             resources :polls, controller: "my_polls", only: [:index, :show, :create, :destroy] do
                 resources :sections, only: [:index, :create, :update, :destroy] do
                     resources :questions, only: [:index, :create, :update, :destroy] do
-                        resources :options, only: [:index, :create, :update, :destroy]
+                        resources :answers, only: [:create]
                     end
                 end
             end

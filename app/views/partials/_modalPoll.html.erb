@@ -1,0 +1,30 @@
+<div id="modal1" class="modal">
+	<div class="modal-content">
+		<h4>Buscar encuesta</h4>
+		<br/>
+		<p>
+			<form>
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="material-icons prefix">vpn_key</i>
+						<input placeholder="Ingresa el código  de la encuesta" type="text" class="validate" ng-model="code">
+						<p class="center" style="color:#FF0000;">{{ errorMessages[0] }}</p>
+					</div>
+				</div>
+				<div class="row">
+					<center>
+						<button class="btn waves-effect waves-light" type="submit" name="action" ng-click="verification(code)">Verificar
+							<i class="material-icons right">send</i>
+						</button>
+					</center>					
+				</div>
+			</form>
+		</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+	</div>
+</div>
+<script type="text/javascript">
+	$('.modal-trigger').leanModal();
+</script>

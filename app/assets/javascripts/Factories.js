@@ -19,11 +19,20 @@ angular.module("Factories",[])
 .factory("poll", ['$resource','Constants' ,function($resource,Constants){
 	return $resource(Constants.URL_API+'polls/:polls',{},{
 		query: { method:'GET', isArray: false },
-		save: {method:'POST'}
+		save: {method:'POST'},
+		get: {method:'GET', params:{id:'@id'}, isArray:false}
 	});
 }])
 .factory("section", ['$resource','Constants' ,function($resource,Constants){
 	return $resource(Constants.URL_API+'polls/:polls/sections/:sections',{},{
+		query: { method:'GET', isArray: false },
+		save: {method:'POST'},
+		update: {method:'PUT'},
+		remove: {method:'DELETE'},
+	});
+}])
+.factory("question", ['$resource','Constants' ,function($resource,Constants){
+	return $resource(Constants.URL_API+'polls/:polls/sections/:sections/questions/:questions',{},{
 		query: { method:'GET', isArray: false },
 		save: {method:'POST'},
 		update: {method:'PUT'},

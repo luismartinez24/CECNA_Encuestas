@@ -1,0 +1,127 @@
+<nav class="blue-grey darken-2">
+	<div class="nav-wrapper">
+		<div class="col s12">
+			<a href="/encuestas" class="breadcrumb">Encuestas</a>
+			<a class="breadcrumb"><%= @poll.title %></a>
+		</div>
+	</div>
+</nav>
+<br/>
+<input id="description" type="hidden" value="<%= @poll.description %>">
+<input id="id" type="hidden" value="<%= @poll.id %>">
+<div class="row center" ng-controller="pollshow" ng-cloak>
+	<div class="row">
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s3"><a href="#test1"><i class="material-icons">list</i> Gestión de la encuesta</a></li>
+				<li class="tab col s3"><a class="active" href="#test2"><i class="material-icons">visibility</i> Pre visualización</a></li>
+				<li class="tab col s3"><a href="#test3"><i class="material-icons">assessment</i> Resultados</a></li>
+			</ul>
+		</div>
+		<div id="test1" class="col s12">Test 1</div>
+		<div id="test2" class="col s12">
+			<div class="card-panel white">
+				<p ng-bind-html="description"></p>
+			</div>
+			<span ng-repeat="obj in getSection">
+				<div class="card-panel white" style="text-align: left;">
+					<span class="card-title"><strong>{{ obj.attributes.rank }}  {{ obj.attributes.name }}</strong></span>
+					<br/>
+					<br/>
+					<span ng-repeat="questions in obj.relationships.questions">
+						{{ obj.attributes.rank }}.{{ questions.attributes.rank }} {{ questions.attributes.description }}
+						<span ng-if="questions.attributes.category == 1">
+							<div class="input-field">
+								<textarea id="textarea1" class="materialize-textarea"></textarea>
+								<label for="textarea1">Ingrese su comentario</label>
+							</div>
+						</span>
+						<span ng-if="questions.attributes.category == 2">
+							<p>
+								<input type="checkbox" id="test8"  checked="checked" disabled="disabled" />
+								<label for="test8">Excelente</label>
+							</p>
+							<p>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">M. Bueno</label>
+							</p>
+							<p>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">Bueno</label>
+							</p>
+							<p>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">Regular</label>
+							</p>
+						</span>
+						<span ng-if="questions.attributes.category == 3">
+							<p>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">1</label>
+								<input type="checkbox" id="test8" checked="checked"  disabled="disabled" />
+								<label for="test8">2</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">3</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">4</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">5</label>
+							</p>
+						</span>
+						<span ng-if="questions.attributes.category == 4">
+							<p>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">1</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">2</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">3</label>
+								<input type="checkbox" id="test8" checked="checked" disabled="disabled" />
+								<label for="test8">4</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">5</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">6</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">7</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">8</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">9</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">10</label>
+							</p>
+						</span>
+						<br/>
+					</span>
+				</div>
+			</span>
+		</div>
+		<div id="test3" class="col s12">
+			<span ng-repeat="obj in getSection">
+				<div class="card-panel grey lighten-1"><strong>{{obj.attributes.name}}</strong></div>
+				<ul class="collapsible popout" data-collapsible="accordion" watch>
+					<li ng-repeat="question in obj.relationships.questions">
+						<div class="collapsible-header"><i class="material-icons">reorder</i>{{question.attributes.description}}</div>
+						<div class="collapsible-body">
+							<span ng-if="question.attributes.category == 1">
+								<br/>
+								<span ng-repeat="answer in question.relationships.answers">
+									<div style="text-align: left; margin-left:10%; margin-right:10%">
+										<i class="material-icons">comment</i> {{ answer.attributes.comment }}
+									</div>
+									<br/>
+								</span>
+							</span>
+						</div>
+					</li>
+				</ul>
+				<script type="text/javascript">
+					$('.collapsible').collapsible({
+						accordion : true
+					});
+				</script>
+			</span>
+		</div>
+	</div>
+</div>

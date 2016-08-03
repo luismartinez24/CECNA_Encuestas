@@ -5,7 +5,7 @@ class Question < ActiveRecord::Base
     validates :description, presence: true
     validates :category, presence: true, numericality: { only_integer: true }
 
-    has_many :options, dependent: :destroy
+    has_many :answers, dependent: :destroy
 
     before_create :generate_rank
 

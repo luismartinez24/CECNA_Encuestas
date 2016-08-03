@@ -11,7 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160629041242) do
+ActiveRecord::Schema.define(version: 20160802200800) do
+
+  create_table "answers", force: :cascade do |t|
+    t.integer  "question_id",   limit: 4
+    t.integer  "competitor_id", limit: 4
+    t.string   "comment",       limit: 255
+    t.integer  "option",        limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "answers", ["competitor_id"], name: "index_answers_on_competitor_id", using: :btree
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
+
+  create_table "competitors", force: :cascade do |t|
+    t.integer  "my_poll_id", limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "competitors", ["my_poll_id"], name: "index_competitors_on_my_poll_id", using: :btree
 
   create_table "my_polls", force: :cascade do |t|
     t.integer  "user_id",     limit: 4
@@ -61,6 +81,9 @@ ActiveRecord::Schema.define(version: 20160629041242) do
     t.datetime "updated_at",             null: false
   end
 
+  add_foreign_key "answers", "competitors"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "competitors", "my_polls"
   add_foreign_key "my_polls", "users"
   add_foreign_key "options", "questions"
   add_foreign_key "questions", "sections"

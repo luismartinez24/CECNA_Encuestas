@@ -34,6 +34,9 @@ angular.module("Controller",[])
                     $scope.errorMessages = data;
                };
             });
+        },
+        verification: function(){
+            $scope.getEntity('poll',$scope.code,'code',true);
         }
     });
 
@@ -44,7 +47,13 @@ angular.module("Controller",[])
     ToDoService.http($scope,$timeout, ToDoService);
 
     angular.extend($scope, {
-        AuthData: {}
+        AuthData: {},
+        CreateData:{
+            poll:{
+                description:'',
+                color: '#26a69a'
+            }
+        }
     });
 
     $scope.getAll('Encuestas','user',ToDoService,$timeout,'');
@@ -67,26 +76,31 @@ angular.module("Controller",[])
         }
     });
 
-}])
-.controller("poll",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
-
-    ToDoService.msg($scope,$timeout, ToDoService);
-    ToDoService.http($scope,$timeout,ToDoService);
-
-    angular.extend($scope,{
-        CreateData:{
-            poll:{
-                description:'',
-                color: '#26a69a'
-            }
-        }
-    });
-
     angular.extend($scope,{
         save: function(CreateData){
             $scope.CreateData = CreateData;
             $scope.CreateData.poll.description =  CKEDITOR.instances['ckeditor'].getData();
             $scope.create($scope.CreateData,'poll');
+            console.log($scope.CreateData);
+        }
+    });
+
+}])
+.controller("pollshow",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
+
+    ToDoService.msg($scope,$timeout, ToDoService);
+    ToDoService.http($scope,$timeout,ToDoService);
+
+    angular.extend($scope,{
+        description: document.getElementById("description").value,
+        poll: document.getElementById("id").value
+    });
+
+    $scope.getAll('section','',$scope.poll);
+
+    angular.extend($scope,{
+        questions: function(obj){
+            //$scope.getAll('question','',$scope.poll,obj.id);
         }
     });
 
@@ -95,7 +109,6 @@ angular.module("Controller",[])
 
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
-
     angular.extend($scope,{
         CreateData:{
             section:{
@@ -108,11 +121,11 @@ angular.module("Controller",[])
             }
         },
         newObj:{},
-        idvar: document.getElementById("idvar").value,
+        poll: document.getElementById("poll").value,
         form: {}
     });
 
-    $scope.getAll('section','',$scope.idvar);
+    $scope.getAll('section','',$scope.poll);
 
     $scope.$watch("getSection",function ( newValue, oldValue ) {
         if ($scope.getSection != null) {
@@ -124,19 +137,75 @@ angular.module("Controller",[])
 
     angular.extend($scope,{
         save: function(CreateData){
-            $scope.create(CreateData,'section',$scope.idvar);
+            $scope.create(CreateData,'section',$scope.poll);
         },
         updateList: function(obj){
             angular.forEach(obj,function(value,index){
-                $scope.update(value.attributes,'section',value.id,$scope.idvar);
+                $scope.update(value.attributes,'section',value.id,$scope.poll);
             });
             $scope.info('posición','La','actualizó');
         },
         destroy: function(obj,objs){
             var index = $scope.getSection.indexOf(obj);
-            $scope.delete('section',obj.id,$scope.idvar,index);
+            $scope.delete('section',obj.id,$scope.poll,index);
             $scope.info('posición','La','elimino');
+        },
+        questions: function(obj){
+            var url = '/encuestas/'+$scope.poll+'/secciones/';
+            window.location.href = url.concat(obj.attributes.id);
         }
     });
+
+}])
+.controller("question",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
+
+    ToDoService.msg($scope,$timeout, ToDoService);
+    ToDoService.http($scope,$timeout,ToDoService);
+
+    angular.extend($scope,{
+        CreateData:{
+            question:{
+                category: '',
+                description: ''
+            }
+        },
+        poll: document.getElementById("poll").value,
+        section: document.getElementById("section").value,
+        category: ''
+    });
+
+    $scope.getAll('question','',$scope.poll,$scope.section);
+
+    $scope.$watch("CreateData.question.category",function ( newValue, oldValue ) {
+        if ($scope.CreateData) {
+            $scope.category = $scope.CreateData.question.category; 
+        };
+    }, true);
+
+    angular.extend($scope,{
+        save: function(){
+            $scope.create($scope.CreateData,'question',$scope.poll,$scope.section);
+        }
+    });
+
+}])
+.controller("resolve",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
+
+    ToDoService.msg($scope,$timeout, ToDoService);
+    ToDoService.http($scope,$timeout,ToDoService);
+
+    angular.extend($scope,{
+        CreateData:{
+            question:{
+                category: '',
+                description: ''
+            }
+        },
+        poll: document.getElementById("poll").value,
+        category: ''
+    });
+
+    $scope.getEntity('poll',$scope.poll,'','');
+    $scope.getAll('section','',$scope.poll);
 
 }]);

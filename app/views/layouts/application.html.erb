@@ -4,6 +4,7 @@
 	<title>Encuestas</title>
 	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
 	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.1.9/angular-materialize.min.js"></script>
 	<%= csrf_meta_tags %>
 	<%= favicon_link_tag 'favicon.ico' %>
 </head>
@@ -14,7 +15,7 @@
 </div>
 <ul id="dropdown1" class="dropdown-content">
 	<li><a href="/encuestas">Mis encuestas</a></li>
-	<li><a href="/encuestas/crear">Nueva</a></li>
+	<li><a href="/encuestas/nueva">Nueva</a></li>
 </ul>
 <nav>
 	<div class="nav-wrapper blue-grey darken-2">
@@ -23,7 +24,14 @@
 		<% end %>
 		<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 		<ul class="right hide-on-med-and-down">
-			<li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons left">assignment</i>Encuesta<i class="material-icons right">arrow_drop_down</i></a></li>
+			<% if !user_signed_in? %>
+				<li><a href="/"><i class="material-icons left">store</i>Inicio</a></li>			
+			<% end %>
+			<% if user_signed_in? %>
+				<li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons left">assignment</i>Encuesta<i class="material-icons right">arrow_drop_down</i></a></li>
+			<% else %>
+				<li><a href="#modal1" class="modal-trigger"><i class="material-icons left">assignment</i>Encuesta</a></li>	
+			<% end %>
 			<li><a href="/faq"><i class="material-icons left">view_list</i>FAQ</a></li>
 			<% if user_signed_in? %>
 				<li>
@@ -34,8 +42,15 @@
 			<% end %>
 		</ul>
 		<ul class="side-nav" id="mobile-demo">
-			<li><a href="/encuestas"><i class="material-icons left">view_list</i>Mis encuestas</a></li>
-			<li><a href="/encuestas/crear"><i class="material-icons left">mode_edit</i>Nueva</a></li>
+			<% if !user_signed_in? %>
+				<li><a href="/"><i class="material-icons left">store</i>Inicio</a></li>
+			<% end %>
+			<% if user_signed_in? %>
+				<li><a href="/encuestas"><i class="material-icons left">view_list</i>Mis encuestas</a></li>
+				<li><a href="/encuestas/nueva"><i class="material-icons left">mode_edit</i>Nueva</a></li>
+			<% else %>
+				<li><a href="#modal1" class="modal-trigger"><i class="material-icons left">assignment</i>Encuesta</a></li>
+			<% end %>
 			<li><a href="/faq"><i class="material-icons left">view_list</i>FAQ</a></li>
 			<% if user_signed_in? %>
 				<li>
@@ -76,16 +91,18 @@
 			<a class="grey-text text-lighten-4 right" href="#!">SIGAE</a>
 		</div>
 	</div>
-	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-		<a class="btn-floating btn-large teal lighten-1">
-			<i class="large material-icons">assignment</i>
-		</a>
-		<ul>
-<!-- 			<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li> -->
-			<li><a href="/encuestas/crear" class="btn-floating yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
-			<li><a href="/encuestas" class="btn-floating light-blue darken-1"><i class="material-icons">view_list</i></a></li>
-		</ul>
-	</div>
+	<% if user_signed_in? %>
+		<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+			<a class="btn-floating btn-large teal lighten-1">
+				<i class="large material-icons">assignment</i>
+			</a>
+			<ul>
+	<!-- 			<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li> -->
+				<li><a href="/encuestas/crear" class="btn-floating yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
+				<li><a href="/encuestas" class="btn-floating light-blue darken-1"><i class="material-icons">view_list</i></a></li>
+			</ul>
+		</div>	
+	<% end %>
 <script type="text/javascript">
 	$(".button-collapse").sideNav();
 	$('.datepicker').pickadate({

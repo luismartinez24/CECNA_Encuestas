@@ -13,7 +13,7 @@ class Api::V1::QuestionsController < Api::V1::MasterApiController
             if @question.save
                 head :ok
             else
-                error_array!(@question.errors.full_messages,:unprocessable_entity)
+                error_array!(@question.errors,:unprocessable_entity)
             end
         else
             error!("No tienes autorizado agregar preguntas a esta sección",:unauthorized)

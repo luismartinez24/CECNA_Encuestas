@@ -8,6 +8,7 @@ class MyPoll < ActiveRecord::Base
     validates :color, presence: true
 
     has_many :sections, dependent: :destroy
+    has_many :competitors, dependent: :destroy
 
     before_create :generate_code
     before_save :default_values

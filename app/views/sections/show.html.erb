@@ -1,0 +1,173 @@
+<nav class="blue-grey darken-2">
+	<div class="nav-wrapper">
+		<div class="col s12">
+			<a href="/encuestas" class="breadcrumb">Encuestas</a>
+			<a href="/encuestas/<%= @poll.id %>" class="breadcrumb"><%= @poll.title %></a>
+			<a href="/encuestas/<%= @poll.id %>/secciones" class="breadcrumb">Secciones</a>
+			<a class="breadcrumb"><%= @section.name %></a>
+		</div>
+	</div>
+</nav>
+<br/>
+<div class="" ng-controller="question" ng-cloak>
+	<%= render "partials/alerts" %>
+	<blockquote>
+		<h3>Lista de preguntas</h3>
+
+		<input id="poll" type="hidden" value="<%= @poll.id %>">
+		<input id="section" type="hidden" value="<%= @section.id %>">
+	</blockquote>
+	<div class="row">
+	<center>
+	<br>
+	<ul as-sortable="sortableOptions" ng-model="getQuestion">
+		<span ng-if="getQuestion.length == 0">
+			<div class="card-panel brown lighten-2"><span class="white-text text-darken-2"><center><b>No se ha agregado ninguna pregunta</b></center></span></div>
+		</span>
+		<span ng-if="getQuestion.length > 0">
+			<div class="card-panel brown lighten-2"><span class="white-text text-darken-2">
+				<div class="row">
+					<center>
+						<span class="flow-text">
+							<a class="waves-effect waves-light btn"><i class="material-icons right">replay</i>Recargar</a>
+							<a class="waves-effect waves-light btn" ng-click="updateList(getQuestion)"><i class="material-icons right">clear_all</i>Editar secciones</a>
+						</span>
+					</center>
+				</div>
+			</div>
+		</span>
+		<li ng-repeat="obj in getQuestion" as-sortable-item class="as-sortable-item">
+			<div as-sortable-item-handle class="as-sortable-item-handle" style="height:50px">
+				<div class="file-field input-field">
+					<div class="row">
+						<div class="col s9">
+							<div class="btn disabled">
+								<span><i class="large material-icons">open_with</i></span>
+							</div>
+							<div class="file-path-wrapper">
+								<input class="file-path" type="text" placeholder="Upload one or more files" ng-model="obj.attributes.description">
+							</div>
+						</div>
+						<div class="col s3">
+							<div class="row">
+								<div class="col s6">
+									<div class="btn green lighten-1">
+										<span ng-click="questions(obj)"><i class="large material-icons">mode_edit</i></span>
+									</div>
+								</div>
+								<div class="col s6">
+									<div class="btn red  darken-2">
+										<span ng-click="destroy(obj,getQuestion)"><i class="large material-icons">delete</i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<br >
+		<div class="card" style="width:80%; height:350px">
+			<div class="card-content">
+				<span class="card-title">Agregar pregunta</span>
+				<form>
+					<div class="input-field">
+						<i class="material-icons prefix">toc</i>
+						<input type="text" ng-model="CreateData.question.description">
+						<code>{{ errorMessages.description[0] }}</code>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+							<select ng-model="CreateData.question.category" id="category" name="category">
+								<option value="" disabled selected>Selecciones una opción</option>
+								<option value="1">Respuesta breve</option>
+								<option value="2">Casillas de verificación en letras</option>
+								<option value="3">Casillas de verificación en numeros 1-5</option>
+								<option value="4">Casillas de verificación en numeros 1-10</option>
+							</select>
+							<label>Tipo de pregunta</label>
+							<code>{{ errorMessages.category[0] }}</code>
+						</div>
+						<div class="input-field col s6">
+							<span ng-if="category == 1">
+								<label>Texto de respuesta breve...</label>
+							</span>
+							<span ng-if="category == 2">
+								<p>
+									<input type="checkbox" id="test8"  checked="checked" disabled="disabled" />
+									<label for="test8">Excelente</label>
+
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">M. Bueno</label>
+
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">Bueno</label>
+								</p>
+								<p>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">Regular</label>
+									
+								</p>
+
+							</span>
+							<span ng-if="category == 3">
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">1</label>
+								<input type="checkbox" id="test8" checked="checked"  disabled="disabled" />
+								<label for="test8">2</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">3</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">4</label>
+								<input type="checkbox" id="test8" disabled="disabled" />
+								<label for="test8">5</label>
+							</span>
+							<span ng-if="category == 4">
+								<p>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">1</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">2</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">3</label>
+									<input type="checkbox" id="test8" checked="checked" disabled="disabled" />
+									<label for="test8">4</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">5</label>
+								</p>
+								<p>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">6</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">7</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">8</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">9</label>
+									<input type="checkbox" id="test8" disabled="disabled" />
+									<label for="test8">10</label>
+								</p>
+							</span>
+						</div>
+					</div>
+					<button class="btn waves-effect waves-light" ng-click="save()">Agregar
+						<i class="material-icons right">playlist_add</i>
+					</button>
+				</form>
+			</div>
+<!--             <div class="card-action">
+              <a href="#">This is a link</a>
+              <a href="#">This is a link</a>
+            </div> -->
+		</div>
+	</center>
+	</div>
+</div>
+<script type="text/javascript">
+	
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+          
+</script>

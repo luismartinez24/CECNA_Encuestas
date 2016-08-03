@@ -26,9 +26,16 @@ class Api::V1::MyPollsController < Api::V1::MasterApiController
         params.require(:poll).permit(:title,:description,:expires_at,:color,:status,:option)
     end
     def set_poll
-        @poll = MyPoll.find_by_id(params[:id])
-        if @poll.blank?
-            error!("Recurso no encontrado",:not_found)
+        if params[:option] == 'code'
+            @poll = MyPoll.where(code: params[:id])
+            if @poll.blank?
+                error!("Recurso no encontrado",:not_found)
+            end
+        else
+            @poll = MyPoll.find_by_id(params[:id])
+            if @poll.blank?
+                error!("Recurso no encontrado",:not_found)
+            end
         end
     end
 end
