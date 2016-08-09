@@ -23,6 +23,9 @@
 //= require ckeditor/init
 //= require spectrum/spectrum
 //= require ng-sortable/dist/ng-sortable
+//= require highcharts/highcharts
+//= require highcharts/modules/exporting
+//= require highcharts-ng/dist/highcharts-ng
 //= require turbolinks
 //= require_tree .
 //

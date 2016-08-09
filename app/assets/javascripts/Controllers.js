@@ -12,11 +12,12 @@ angular.module("Controller",[])
     angular.extend($scope, {
         signin: function() {
             $scope.loading = true;
-            auth.login({'user':$scope.AuthData.user,'password':$scope.AuthData.password})
+            auth.login({'username':$scope.AuthData.username,'password':$scope.AuthData.password})
             .success(function(data) {
                $scope.create(data,'Login');
             })
             .error(function(data, status) {
+                $scope.loading = false;
                ToDoService.msg($scope,$timeout, ToDoService);
                if(status == 401) {
                     $scope.msg = '¡Vaya! Parece que olvidaste tu contraseña. Vuelva a intentarlo o consulte al administrador del sitio.';
@@ -90,6 +91,7 @@ angular.module("Controller",[])
 
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
+    ToDoService.graph($scope,$timeout,ToDoService);
 
     angular.extend($scope,{
         description: document.getElementById("description").value,
@@ -99,8 +101,44 @@ angular.module("Controller",[])
     $scope.getAll('section','',$scope.poll);
 
     angular.extend($scope,{
-        questions: function(obj){
-            //$scope.getAll('question','',$scope.poll,obj.id);
+        Option: function(obj,option,graph){
+            var count = 0;
+            var value = 0;
+            var countOption = 0;
+            angular.forEach(obj,function(value,index){
+                count++;
+            });
+            angular.forEach(obj,function(value,index){
+                if (value.attributes.option == option) {
+                    countOption++;
+                };
+            });
+            if (count == 0) {
+                value = 0;
+            }else{
+                if (graph == false) {
+                    value = (countOption/count)*100;
+                }else{
+                    value = countOption;
+                }
+            };
+            value = Math.round(value);
+            return value;
+        },
+        chart: function(title,id,type,obj){
+            if (type == 1) {
+                var category = ['1', '2', '3', '4', '5'];
+                var array = [$scope.Option(obj,1,true),$scope.Option(obj,2,true),$scope.Option(obj,3,true),$scope.Option(obj,4,true),$scope.Option(obj,5,true)];
+            };
+            if (type == 2) {
+                var category = ['1', '2', '3', '4', '5','6','7','8','9','10'];
+                var array = [$scope.Option(obj,1,true),$scope.Option(obj,2,true),$scope.Option(obj,3,true),$scope.Option(obj,4,true),$scope.Option(obj,5,true),$scope.Option(obj,6,true),$scope.Option(obj,7,true),$scope.Option(obj,8,true),$scope.Option(obj,9,true),$scope.Option(obj,10,true)];
+            };
+            if (type == 3) {
+                var category = ['Excelente', 'M. Bueno', 'Bueno', 'Regular'];
+                var array = [$scope.Option(obj,1,true),$scope.Option(obj,2,true),$scope.Option(obj,3,true),$scope.Option(obj,4,true)];
+            };
+            $scope.bar(title,id,category,array);
         }
     });
 
@@ -109,6 +147,7 @@ angular.module("Controller",[])
 
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
+
     angular.extend($scope,{
         CreateData:{
             section:{
@@ -189,23 +228,69 @@ angular.module("Controller",[])
     });
 
 }])
-.controller("resolve",['$scope','ToDoService','$timeout',function($scope,ToDoService,$timeout){
+.controller("resolve",['$scope','ToDoService','$timeout','Constants',function($scope,ToDoService,$timeout,Constants){
 
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
 
     angular.extend($scope,{
-        CreateData:{
-            question:{
-                category: '',
-                description: ''
-            }
-        },
         poll: document.getElementById("poll").value,
-        category: ''
+        response: [],
+        error: []
     });
 
     $scope.getEntity('poll',$scope.poll,'','');
     $scope.getAll('section','',$scope.poll);
 
+    angular.extend($scope,{
+        save: function(obj){
+            var verification = true;
+            angular.forEach(obj,function(value,index){
+                angular.forEach(value.relationships.questions,function(value,index){
+                    if (value.attributes.category != 1 && $scope.response[value.id] == undefined) {
+                        verification = false;
+                        $scope.error[value.id]  = true;
+                    }else{
+                        $scope.error[value.id]  = false;
+                    };
+                });
+            });
+            if (verification == true) {
+                $scope.create('','competitor',$scope.poll,'',obj);
+            };
+        },
+        responsePoll: function(obj,competitor,poll){
+            angular.forEach(obj,function(value,index){
+                angular.forEach(value.relationships.questions,function(value,index){
+                    angular.extend($scope,{
+                        CreateData:{
+                            answer:{
+                                competitor_id: '',
+                                comment: '',
+                                option: ''
+                            }
+                        }
+                    });
+                    $scope.CreateData.answer.competitor_id = competitor;
+                    if (value.attributes.category == 1) {
+                        $scope.CreateData.answer.comment = $scope.response[value.id];
+                        $scope.create($scope.CreateData,'answer',value.attributes.id,poll,value.attributes.section_id);
+                    };
+                    if (value.attributes.category == 2) {
+                        $scope.CreateData.answer.option = $scope.response[value.id];
+                        $scope.create($scope.CreateData,'answer',value.attributes.id,poll,value.attributes.section_id);
+                    };
+                    if (value.attributes.category == 3) {
+                        $scope.CreateData.answer.option = $scope.response[value.id];
+                        $scope.create($scope.CreateData,'answer',value.attributes.id,poll,value.attributes.section_id);
+                    };
+                    if (value.attributes.category == 4) {
+                        $scope.CreateData.answer.option = $scope.response[value.id];
+                        $scope.create($scope.CreateData,'answer',value.attributes.id,poll,value.attributes.section_id);
+                    };
+                });
+            });
+            window.location.href = '/';
+        }
+    });
 }]);

@@ -38,4 +38,14 @@ angular.module("Factories",[])
 		update: {method:'PUT'},
 		remove: {method:'DELETE'},
 	});
+}])
+.factory("competitors", ['$resource','Constants' ,function($resource,Constants){
+	return $resource(Constants.URL_API+'polls/:polls/competitors/:competitors',{},{
+		save: {method:'POST'}
+	});
+}])
+.factory("answers", ['$resource','Constants' ,function($resource,Constants){
+	return $resource(Constants.URL_API+'polls/:polls/sections/:sections/questions/:questions/answers/:answers',{},{
+		save: {method:'POST'}
+	});
 }]);

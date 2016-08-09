@@ -13,6 +13,7 @@ Rails.application.routes.draw do
             resources :sessions, only: [:create]
             resources :users, only: [:index, :show]
             resources :polls, controller: "my_polls", only: [:index, :show, :create, :destroy] do
+                resources :competitors, only: [:create]
                 resources :sections, only: [:index, :create, :update, :destroy] do
                     resources :questions, only: [:index, :create, :update, :destroy] do
                         resources :answers, only: [:create]

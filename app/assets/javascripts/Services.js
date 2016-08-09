@@ -1,5 +1,5 @@
 angular.module("ToDoService",[])
-.service("ToDoService", [ 'login','poll','section','question',function(login,poll,section,question){
+.service("ToDoService", ['login','poll','section','question','competitors','Constants','answers',function(login,poll,section,question,competitors,Constants,answers){
 
 	this.msg = function($scope,$timeout, ToDoService){
 
@@ -43,7 +43,7 @@ angular.module("ToDoService",[])
 	this.http = function($scope,$timeout, ToDoService){
 		ToDoService.msg($scope,$timeout, ToDoService);
 		angular.extend($scope,{
-			create: function(data,entity,id1,id2){
+			create: function(data,entity,id1,id2,obj){
 				if (entity == 'Login') {
 					login.save(data, function(data){
 						$scope.loading = false;
@@ -55,6 +55,23 @@ angular.module("ToDoService",[])
 
 				if (entity == 'poll') {
 					poll.save(data, function(data){
+
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+
+				if (entity == 'competitor') {
+					competitors.save({'polls':id1},data, function(data){
+						$scope.competitor = data.data.attributes.id;
+						$scope.responsePoll(obj,data.data.attributes.id,id1);
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+
+				if (entity == 'answer') {
+					answers.save({'questions':id1,'polls':id2,'sections':obj},data, function(data){
 
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
@@ -75,9 +92,6 @@ angular.module("ToDoService",[])
 					question.save({'polls':id1,'sections':id2},data, function(data){
 						$scope.success(ToDoService,$timeout,data);
 						$scope.CreateData.question.description = '';
-						//$scope.category = 1;
-						// $scope.getSection.push(data.data);
-						// $scope.CreateData.section.name = '';
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -131,7 +145,7 @@ angular.module("ToDoService",[])
 			},
 			getEntity: function(entity,id,option,search){
 				if (entity == 'poll') {
-					poll.get({'polls': id}, function(data){
+					poll.get({'polls': id,'option':option}, function(data){
 						$scope.pollData = data.data.attributes;
 						if (search) {
 							var url = '/contestar?option=';
@@ -141,6 +155,77 @@ angular.module("ToDoService",[])
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
+			}
+		});
+	},
+	this.graph = function($scope,$timeout, ToDoService){
+		angular.extend($scope,{
+			bar: function(vtitle,vid,category,array){
+				var chart = {
+					type: 'bar'
+				}
+				var title = {
+					text: vtitle
+				};
+				var subtitle = {
+					text: '<a href="https://en.wikipedia.org/wiki/World_population">www.cecna.edu.ni/estadisticas</a>'
+				};
+				var xAxis = {
+					categories: category
+				};
+				var yAxis = {
+					title: {
+						text: 'Participantes'
+					},
+					plotbar: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				};
+
+				var tooltip = {
+					valueSuffix: ''
+				}
+				  var plotOptions = {
+					bar: {
+						dataLabels: {
+							enabled: true
+						}
+					}
+				}
+
+				var legend = {
+					layout: 'vertical',
+					align: 'right',
+					verticalAlign: 'top',
+					x: -40,
+					y: 80,
+					floating: true,
+					borderWidth: 1,
+					backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+					shadow: true
+				};
+
+				var series =  [
+					{
+						name: 'Participantes',
+						data: array
+					}
+				];
+
+				var json = {};
+				json.chart = chart;
+				json.title = title;
+				json.subtitle = subtitle;
+				json.xAxis = xAxis;
+				json.yAxis = yAxis;
+				json.tooltip = tooltip;
+				json.legend = legend;
+				json.series = series;
+				json.plotOptions = plotOptions;
+
+				$('#'+vid).highcharts(json);
 			}
 		});
 	}

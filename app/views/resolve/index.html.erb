@@ -13,69 +13,86 @@
 						{{ obj.attributes.rank }}.{{ questions.attributes.rank }} {{ questions.attributes.description }}
 						<span ng-if="questions.attributes.category == 1">
 							<div class="input-field">
-								<textarea id="textarea1" class="materialize-textarea"></textarea>
-								<label for="textarea1">Ingrese su comentario</label>
+								<textarea id="textarea{{questions.attributes.id}}" class="materialize-textarea" ng-model="response[questions.attributes.id]"></textarea>
+								<label for="textarea{{questions.attributes.id}}">Ingrese su comentario</label>
 							</div>
+							<span ng-if="error[questions.attributes.id]">
+								<code>Debe de responder esta pregunta</code>
+							</span>
 						</span>
 						<span ng-if="questions.attributes.category == 2">
 							<p>
-								<input type="checkbox" id="test1"  />
-								<label for="test1">Excelente</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}1" value="1" />
+								<label for="{{questions.attributes.id}}1">Excelente</label>
 							</p>
 							<p>
-								<input type="checkbox" id="test2"/>
-								<label for="test2">M. Bueno</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}2" value="2" />
+								<label for="{{questions.attributes.id}}2">M. Bueno</label>
 							</p>
 							<p>
-								<input type="checkbox" id="test3"/>
-								<label for="test3">Bueno</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}3" value="3" />
+								<label for="{{questions.attributes.id}}3">Bueno</label>
 							</p>
 							<p>
-								<input type="checkbox" id="test4"/>
-								<label for="test4">Regular</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}4" value="4" />
+								<label for="{{questions.attributes.id}}4">Regular</label>
 							</p>
+							<span ng-if="error[questions.attributes.id]">
+								<code>Debe de responder esta pregunta</code>
+							</span>
 						</span>
 						<span ng-if="questions.attributes.category == 3">
 							<p>
-								<input type="checkbox" id="test1"/>
-								<label for="test1">1</label>
-								<input type="checkbox" id="test2"/>
-								<label for="test2">2</label>
-								<input type="checkbox" id="test3"/>
-								<label for="test3">3</label>
-								<input type="checkbox" id="test4"/>
-								<label for="test4">4</label>
-								<input type="checkbox" id="test5"/>
-								<label for="test5">5</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}1" value="1" />
+								<label for="{{questions.attributes.id}}1">1</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}2" value="2" />
+								<label for="{{questions.attributes.id}}2">2</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}3" value="3" />
+								<label for="{{questions.attributes.id}}3">3</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}4" value="4" />
+								<label for="{{questions.attributes.id}}4">4</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}5" value="5" />
+								<label for="{{questions.attributes.id}}5">5</label>
 							</p>
+							<span ng-if="error[questions.attributes.id]">
+								<code>Debe de responder esta pregunta</code>
+							</span>
 						</span>
 						<span ng-if="questions.attributes.category == 4">
 							<p>
-								<input type="checkbox" id="test6"/>
-								<label for="test6">1</label>
-								<input type="checkbox" id="test7"/>
-								<label for="test7">2</label>
-								<input type="checkbox" id="test8"/>
-								<label for="test8">3</label>
-								<input type="checkbox" id="test9" />
-								<label for="test9">4</label>
-								<input type="checkbox" id="test10"/>
-								<label for="test10">5</label>
-								<input type="checkbox" id="test11"/>
-								<label for="test11">6</label>
-								<input type="checkbox" id="test12"/>
-								<label for="test12">7</label>
-								<input type="checkbox" id="test13"/>
-								<label for="test13">8</label>
-								<input type="checkbox" id="test14"/>
-								<label for="test14">9</label>
-								<input type="checkbox" id="test15"/>
-								<label for="test15">10</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}1" value="1" />
+								<label for="{{questions.attributes.id}}1">1</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}2" value="2" />
+								<label for="{{questions.attributes.id}}2">2</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}3" value="3" />
+								<label for="{{questions.attributes.id}}3">3</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}4" value="4" />
+								<label for="{{questions.attributes.id}}4">4</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}5" value="5" />
+								<label for="{{questions.attributes.id}}5">5</label>
+
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}6" value="6" />
+								<label for="{{questions.attributes.id}}6">6</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}7" value="7" />
+								<label for="{{questions.attributes.id}}7">7</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}8" value="8" />
+								<label for="{{questions.attributes.id}}8">8</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}9" value="9" />
+								<label for="{{questions.attributes.id}}9">9</label>
+								<input name="group{{questions.attributes.id}}" type="radio" ng-model="response[questions.attributes.id]" id="{{questions.attributes.id}}10" value="10" />
+								<label for="{{questions.attributes.id}}10">10</label>
 							</p>
+							<span ng-if="error[questions.attributes.id]">
+								<code>Debe de responder esta pregunta</code>
+							</span>
 						</span>
 						<br/>
 					</span>
 				</div>
 			</span>
+			<button class="btn waves-effect waves-light" type="submit" ng-click="save(getSection)" name="action">
+				Enviar
+				<i class="material-icons right">send</i>
+			</button>
 	</div>
 </div>

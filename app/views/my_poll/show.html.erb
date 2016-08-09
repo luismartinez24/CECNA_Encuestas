@@ -15,7 +15,7 @@
 			<ul class="tabs">
 				<li class="tab col s3"><a href="#test1"><i class="material-icons">list</i> Gestión de la encuesta</a></li>
 				<li class="tab col s3"><a class="active" href="#test2"><i class="material-icons">visibility</i> Pre visualización</a></li>
-				<li class="tab col s3"><a href="#test3"><i class="material-icons">assessment</i> Resultados</a></li>
+				<li class="tab col s3"><a href="#test3"><i class="material-icons">assessment</i> Resultados (<%= @competitors %>)</a></li>
 			</ul>
 		</div>
 		<div id="test1" class="col s12">Test 1</div>
@@ -98,6 +98,13 @@
 			</span>
 		</div>
 		<div id="test3" class="col s12">
+			<br/>
+			<center>
+				<i class="large material-icons">person_pin</i>
+				<h3>
+					( <%= @competitors %> ) Participantes
+				</h3>
+			</center>
 			<span ng-repeat="obj in getSection">
 				<div class="card-panel grey lighten-1"><strong>{{obj.attributes.name}}</strong></div>
 				<ul class="collapsible popout" data-collapsible="accordion" watch>
@@ -107,11 +114,68 @@
 							<span ng-if="question.attributes.category == 1">
 								<br/>
 								<span ng-repeat="answer in question.relationships.answers">
-									<div style="text-align: left; margin-left:10%; margin-right:10%">
-										<i class="material-icons">comment</i> {{ answer.attributes.comment }}
-									</div>
-									<br/>
+									<span ng-if="answer.attributes.comment != null && answer.attributes.comment != ''">
+										<div style="text-align: left; margin-left:10%; margin-right:10%">
+											<i class="material-icons">comment</i> {{ answer.attributes.comment }}
+										</div>
+										<br/>
+									</span>
 								</span>
+							</span>
+							<span ng-if="question.attributes.category == 2">
+								<div class="row">
+									<div class="col s2">-</div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,1,false) }}%</h5><hr><h5>Excelente</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,2,false) }}%</h5><hr><h5>M. Bueno</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,3,false) }}%</h5><hr><h5>Bueno</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,4,false) }}%</h5><hr><h5>Regular</h5></div>
+									<div class="col s2">-</div>
+								</div>
+								<div class="row">
+									<center>
+										{{chart(question.attributes.description,question.attributes.id,3,question.relationships.answers)}}
+										<div id="{{question.attributes.id}}" style="width: 550px; height: 400px; margin: 0 auto"></div>
+									</center>
+								</div>
+							</span>
+							<span ng-if="question.attributes.category == 3">
+								<div class="row">
+									<div class="col s1">-</div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,1,false) }}%</h5><hr><h5>1</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,2,false) }}%</h5><hr><h5>2</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,3,false) }}%</h5><hr><h5>3</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,4,false) }}%</h5><hr><h5>4</h5></div>
+									<div class="col s2"><h5>{{ Option(question.relationships.answers,5,false) }}%</h5><hr><h5>5</h5></div>
+									<div class="col s1">-</div>
+								</div>
+								<div class="row">
+									<center>
+										{{chart(question.attributes.description,question.attributes.id,1,question.relationships.answers)}}
+										<div id="{{question.attributes.id}}" style="width: 550px; height: 400px; margin: 0 auto"></div>
+									</center>
+								</div>
+							</span>
+							<span ng-if="question.attributes.category == 4">
+								<div class="row">
+									<div class="col s1">-</div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,1,false) }}%</h5><hr><h5>1</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,2,false) }}%</h5><hr><h5>2</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,3,false) }}%</h5><hr><h5>3</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,4,false) }}%</h5><hr><h5>4</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,5,false) }}%</h5><hr><h5>5</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,6,false) }}%</h5><hr><h5>6</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,7,false) }}%</h5><hr><h5>7</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,8,false) }}%</h5><hr><h5>8</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,9,false) }}%</h5><hr><h5>9</h5></div>
+									<div class="col s1"><h5>{{ Option(question.relationships.answers,10,false) }}%</h5><hr><h5>10</h5></div>
+									<div class="col s1">-</div>
+								</div>
+								<div class="row">
+									<center>
+										{{chart(question.attributes.description,question.attributes.id,2,question.relationships.answers)}}
+										<div id="{{question.attributes.id}}" style="width: 550px; height: 400px; margin: 0 auto"></div>
+									</center>
+								</div>
 							</span>
 						</div>
 					</li>

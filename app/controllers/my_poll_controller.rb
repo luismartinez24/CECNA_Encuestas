@@ -11,8 +11,9 @@ class MyPollController < ApplicationController
 
 	def set_poll
 		@poll = MyPoll.find_by_id(params[:polls])
-		# if @poll.blank?
-		# 	error!("Recurso no encontrado",:not_found)
-		# end
+		@competitors = Competitor.where(my_poll_id: params[:polls]).count
+		if @poll.blank?
+			error!("Recurso no encontrado",:not_found)
+		end
 	end
 end

@@ -27,7 +27,7 @@ class Api::V1::MyPollsController < Api::V1::MasterApiController
     end
     def set_poll
         if params[:option] == 'code'
-            @poll = MyPoll.where(code: params[:id])
+            @poll = MyPoll.where(code: params[:id]).first
             if @poll.blank?
                 error!("Recurso no encontrado",:not_found)
             end
