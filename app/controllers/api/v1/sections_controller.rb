@@ -1,5 +1,5 @@
 class Api::V1::SectionsController < Api::V1::MasterApiController
-    before_action :auth, only: [:create]
+    before_action :auth, only: [:create,:update, :destroy]
     before_action :set_poll
     before_action :set_section, only: [:update, :destroy]
 
@@ -21,21 +21,29 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
     end
 
     def update
-        if @section.update(sections_params)
-            render template: "api/v1/sections/show"
+        if @poll.user == @current_user
+            if @section.update(sections_params)
+                render template: "api/v1/sections/show"
+            else
+                error_array!(@section.errors,:unprocessable_entity)
+            end
         else
-            error_array!(@section.errors,:unprocessable_entity)
+            error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)
         end
     end
 
     def destroy
-        if @section.destroy
-            head :ok
+        if @poll.user == @current_user
+            if @section.destroy
+                head :ok
+            else
+                error_array!(@section.errors,:unprocessable_entity)
+            end
         else
-            error_array!(@section.errors,:unprocessable_entity)
-        end     
+            error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)
+        end
     end
-
+#----------
     private
 
     def set_poll

@@ -91,21 +91,29 @@ angular.module("ToDoService",[])
 				if (entity == 'question') {
 					question.save({'polls':id1,'sections':id2},data, function(data){
 						$scope.success(ToDoService,$timeout,data);
+						$scope.getQuestion.push(data.data);
 						$scope.CreateData.question.description = '';
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
 			},
-			update: function(data,entity,id1,id2){
+			update: function(data,entity,id1,id2,id3){
 				if (entity == 'section') {
 					section.update({'sections':id1,'polls':id2},data, function(data){
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
+
+				if (entity == 'question') {
+					question.update({'sections':id3,'polls':id2,'questions':id1},data, function(data){
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
 			},
-			delete: function(entity,id1,id2,index){
+			delete: function(entity,id1,id2,id3,index){
 				if (entity == 'section') {
 					section.remove({'sections':id1,'polls':id2}, function(data) {
 						$scope.getSection.splice(index, 1);
@@ -114,6 +122,20 @@ angular.module("ToDoService",[])
 						}
 						angular.forEach($scope.getSection,function(value,index){
 							$scope.update(value.attributes,'section',value.id,id2);
+						});
+					}, function(data){
+						$scope.errors(data,ToDoService,$timeout);
+					});
+				};
+
+				if (entity == 'question') {
+					question.remove({'sections':id3,'polls':id2,'questions':id1}, function(data) {
+						$scope.getQuestion.splice(index, 1);
+						for ( var i = 0; i < $scope.getQuestion.length; i++ ) {
+							$scope.getQuestion[i].attributes.rank = i+1;
+						}
+						angular.forEach($scope.getQuestion,function(value,index){
+							$scope.update(value.attributes,'question',value.id,id2,id3);
 						});
 					}, function(data){
 						$scope.errors(data,ToDoService,$timeout);

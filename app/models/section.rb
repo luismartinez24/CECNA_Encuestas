@@ -8,10 +8,12 @@ class Section < ActiveRecord::Base
 
     before_create :generate_rank
 
+    scope :rank, ->{ order("rank ASC") }
+
+    private
+
     def generate_rank
         self.rank = Section.where(my_poll_id: self.my_poll_id).count + 1
     end
-
-   scope :rank, ->{ order("rank ASC") }
 
 end

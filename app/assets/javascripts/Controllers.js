@@ -187,7 +187,10 @@ angular.module("Controller",[])
         destroy: function(obj,objs){
             var index = $scope.getSection.indexOf(obj);
             $scope.delete('section',obj.id,$scope.poll,index);
-            $scope.info('posición','La','elimino');
+            $scope.info('recurso','El','elimino');
+        },
+        reload: function(){
+            $scope.getAll('section','',$scope.poll);
         },
         questions: function(obj){
             var url = '/encuestas/'+$scope.poll+'/secciones/';
@@ -221,9 +224,31 @@ angular.module("Controller",[])
         };
     }, true);
 
+    $scope.$watch("getQuestion",function ( newValue, oldValue ) {
+        if ($scope.getQuestion != null) {
+            for ( var i = 0; i < newValue.length; i++ ) {
+                newValue[i].attributes.rank = i+1;
+            }
+        };
+    }, true);
+
     angular.extend($scope,{
         save: function(){
             $scope.create($scope.CreateData,'question',$scope.poll,$scope.section);
+        },
+        updateList: function(obj){
+            angular.forEach(obj,function(value,index){
+                $scope.update(value.attributes,'question',value.id,$scope.poll,$scope.section);
+            });
+            $scope.info('posición','La','actualizó');
+        },
+        destroy: function(obj,objs){
+            var index = $scope.getQuestion.indexOf(obj);
+            $scope.delete('question',obj.id,$scope.poll,$scope.section,index);
+            $scope.info('recurso','El','elimino');
+        },
+        reload: function(){
+            $scope.getAll('question','',$scope.poll,$scope.section);
         }
     });
 

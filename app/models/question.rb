@@ -9,7 +9,13 @@ class Question < ActiveRecord::Base
 
     before_create :generate_rank
 
+    scope :rank, ->{ order("rank ASC") }
+
+    private
+
     def generate_rank
         self.rank = Question.where(section_id: self.section_id).count + 1
     end 
+
+
 end
