@@ -20,6 +20,7 @@ angular.module("Factories",[])
 	return $resource(Constants.URL_API+'polls/:polls',{},{
 		query: { method:'GET', isArray: false },
 		save: {method:'POST'},
+		update: {method:'PUT'},
 		get: {method:'GET', params:{id:'@id'}, isArray:false}
 	});
 }])
@@ -49,3 +50,4 @@ angular.module("Factories",[])
 		save: {method:'POST'}
 	});
 }]);
+

@@ -45,14 +45,14 @@
 								<span><i class="large material-icons">open_with</i></span>
 							</div>
 							<div class="file-path-wrapper">
-								<input class="file-path" type="text" placeholder="Upload one or more files" ng-model="obj.attributes.description">
+								<input class="file-path style-cecna" type="text" placeholder="Description" ng-model="obj.attributes.description" style="color: black;font-size: 17px;" disabled>
 							</div>
 						</div>
 						<div class="col s3">
 							<div class="row">
 								<div class="col s6">
 									<div class="btn green lighten-1">
-										<span ng-click="questions(obj)"><i class="large material-icons">mode_edit</i></span>
+										<span ng-click="edit(obj)"><i class="large material-icons">mode_edit</i></span>
 									</div>
 								</div>
 								<div class="col s6">
@@ -74,26 +74,22 @@
 				<form>
 					<div class="input-field">
 						<i class="material-icons prefix">toc</i>
-						<input type="text" ng-model="CreateData.question.description">
+						<input type="text" ng-model="CreateData.question.description" style="color: black;font-size: 17px;">
 						<code>{{ errorMessages.description[0] }}</code>
 					</div>
 					<div class="row">
 						<div class="input-field col s6">
-							<select ng-model="CreateData.question.category" id="category" name="category">
-								<option value="" disabled selected>Selecciones una opción</option>
-								<option value="1">Respuesta breve</option>
-								<option value="2">Casillas de verificación en letras</option>
-								<option value="3">Casillas de verificación en numeros 1-5</option>
-								<option value="4">Casillas de verificación en numeros 1-10</option>
-							</select>
 							<label>Tipo de pregunta</label>
+							<br>
+							<br>
+							<select class="browser-default inputselect" ng-options="item.label for item in items" ng-model="Category"></select>
 							<code>{{ errorMessages.category[0] }}</code>
 						</div>
-						<div class="input-field col s6">
-							<span ng-if="category == 1">
+						<div class="input-field col s6" style="margin-top: 50px;">
+							<span ng-if="Category.id == 1">
 								<label>Texto de respuesta breve...</label>
 							</span>
-							<span ng-if="category == 2">
+							<span ng-if="Category.id == 2">
 								<p>
 									<input type="checkbox" id="test8"  checked="checked" disabled="disabled" />
 									<label for="test8">Excelente</label>
@@ -107,11 +103,10 @@
 								<p>
 									<input type="checkbox" id="test8" disabled="disabled" />
 									<label for="test8">Regular</label>
-									
 								</p>
 
 							</span>
-							<span ng-if="category == 3">
+							<span ng-if="Category.id == 3">
 								<input type="checkbox" id="test8" disabled="disabled" />
 								<label for="test8">1</label>
 								<input type="checkbox" id="test8" checked="checked"  disabled="disabled" />
@@ -123,7 +118,7 @@
 								<input type="checkbox" id="test8" disabled="disabled" />
 								<label for="test8">5</label>
 							</span>
-							<span ng-if="category == 4">
+							<span ng-if="Category.id == 4">
 								<p>
 									<input type="checkbox" id="test8" disabled="disabled" />
 									<label for="test8">1</label>
@@ -151,9 +146,19 @@
 							</span>
 						</div>
 					</div>
-					<button class="btn waves-effect waves-light" ng-click="save()">Agregar
-						<i class="material-icons right">playlist_add</i>
-					</button>
+					<span ng-hide="EditQestion">
+						<button class="btn waves-effect waves-light" ng-click="save(true)">Agregar
+							<i class="material-icons right">playlist_add</i>
+						</button>
+					</span>
+					<span ng-show="EditQestion">
+						<button class="btn waves-effect waves-light" ng-click="save()">Editar
+							<i class="material-icons right">mode_edit</i>
+						</button>
+						<button class="btn waves-effect waves-light" ng-click="cancel()">Cancelar
+							<i class="material-icons right">shuffle</i>
+						</button>
+					</span>
 				</form>
 			</div>
 <!--             <div class="card-action">
@@ -164,10 +169,25 @@
 	</center>
 	</div>
 </div>
-<script type="text/javascript">
-	
-  $(document).ready(function() {
-    $('select').material_select();
-  });
-          
+<script type="text/javascript">	
+	$(document).ready(function() {
+		$('select').material_select();
+	});
 </script>
+<style type="text/css">
+	.inputselect{
+		position: relative;
+		cursor: pointer;
+		background-color: transparent;
+		border: none;
+		border-bottom: 1px solid #9e9e9e;
+		outline: none;
+		height: 3rem;
+		line-height: 3rem;
+		width: 100%;
+		font-size: 1rem;
+		margin: 0 0 15px 0;
+		padding: 0;
+		display: block;
+	}
+</style>

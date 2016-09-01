@@ -26,6 +26,7 @@
 //= require highcharts/highcharts
 //= require highcharts/modules/exporting
 //= require highcharts-ng/dist/highcharts-ng
+//= require ng-infinite-scroller-origin/build/ng-infinite-scroll
 //= require turbolinks
 //= require_tree .
 //

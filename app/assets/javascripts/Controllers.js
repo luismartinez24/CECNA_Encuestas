@@ -46,18 +46,23 @@ angular.module("Controller",[])
 
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout, ToDoService);
+    ToDoService.config($scope);
 
     angular.extend($scope, {
         AuthData: {},
         CreateData:{
             poll:{
+                title:'',
                 description:'',
-                color: '#26a69a'
+                color:'#26a69a'
             }
         }
     });
-
-    $scope.getAll('Encuestas','user',ToDoService,$timeout,'');
+    $scope.ckeditorConfig();
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.reloadScroll = true;
+    CKEDITOR.instances['ckeditor'].setData('Describa de forma clara aspectos que caracterizan la encuesta a aplicar');
 
     angular.extend($scope,{
         date: function(date){
@@ -79,10 +84,16 @@ angular.module("Controller",[])
 
     angular.extend($scope,{
         save: function(CreateData){
+            $scope.CreateData.poll.color = $("#colorpicker").spectrum("get").toHexString();
             $scope.CreateData = CreateData;
             $scope.CreateData.poll.description =  CKEDITOR.instances['ckeditor'].getData();
             $scope.create($scope.CreateData,'poll');
-            console.log($scope.CreateData);
+        },
+        nextPage: function(){
+            $scope.busy = true;
+            $scope.reloadScroll = true;
+            $scope.page++;
+            $scope.getAll('Encuestas','user',ToDoService,$timeout,$scope.page);
         }
     });
 
@@ -92,13 +103,17 @@ angular.module("Controller",[])
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
     ToDoService.graph($scope,$timeout,ToDoService);
+    ToDoService.config($scope);
 
     angular.extend($scope,{
-        description: document.getElementById("description").value,
-        poll: document.getElementById("id").value
+        poll: document.getElementById("id").value,
+        UpdateData:{
+            poll:{}
+        }
     });
 
     $scope.getAll('section','',$scope.poll);
+    $scope.getEntity('poll',$scope.poll,'','',true);
 
     angular.extend($scope,{
         Option: function(obj,option,graph){
@@ -139,6 +154,10 @@ angular.module("Controller",[])
                 var array = [$scope.Option(obj,1,true),$scope.Option(obj,2,true),$scope.Option(obj,3,true),$scope.Option(obj,4,true)];
             };
             $scope.bar(title,id,category,array);
+        },
+        edit: function(obj){
+            obj.poll.description =  CKEDITOR.instances['ckeditor'].getData();
+            $scope.update(obj,'poll','',obj.poll.id);
         }
     });
 
@@ -165,6 +184,7 @@ angular.module("Controller",[])
     });
 
     $scope.getAll('section','',$scope.poll);
+    $scope.EditSection = false;
 
     $scope.$watch("getSection",function ( newValue, oldValue ) {
         if ($scope.getSection != null) {
@@ -175,8 +195,12 @@ angular.module("Controller",[])
     }, true);
 
     angular.extend($scope,{
-        save: function(CreateData){
-            $scope.create(CreateData,'section',$scope.poll);
+        save: function(option){
+            if (option) {
+                $scope.create($scope.CreateData,'section',$scope.poll);
+            }else{
+                $scope.update($scope.CreateData,'section',$scope.CreateData.section.id,$scope.poll,'',true,$scope.index);
+            };
         },
         updateList: function(obj){
             angular.forEach(obj,function(value,index){
@@ -195,6 +219,18 @@ angular.module("Controller",[])
         questions: function(obj){
             var url = '/encuestas/'+$scope.poll+'/secciones/';
             window.location.href = url.concat(obj.attributes.id);
+        },
+        edit: function(obj){
+            $scope.index = $scope.getSection.indexOf(obj);
+            $scope.EditSection = true;
+            $scope.CreateData.section.name = obj.attributes.name;
+            $scope.CreateData.section.id = obj.attributes.id;
+            $scope.CreateData.section.rank = obj.attributes.rank;
+        },
+        cancel: function(){
+            $scope.CreateData.section.name = '';
+            $scope.CreateData.section.id = '';
+            $scope.EditSection = false;
         }
     });
 
@@ -208,7 +244,9 @@ angular.module("Controller",[])
         CreateData:{
             question:{
                 category: '',
-                description: ''
+                description: '',
+                rank:'',
+                id:''
             }
         },
         poll: document.getElementById("poll").value,
@@ -218,12 +256,6 @@ angular.module("Controller",[])
 
     $scope.getAll('question','',$scope.poll,$scope.section);
 
-    $scope.$watch("CreateData.question.category",function ( newValue, oldValue ) {
-        if ($scope.CreateData) {
-            $scope.category = $scope.CreateData.question.category; 
-        };
-    }, true);
-
     $scope.$watch("getQuestion",function ( newValue, oldValue ) {
         if ($scope.getQuestion != null) {
             for ( var i = 0; i < newValue.length; i++ ) {
@@ -232,9 +264,28 @@ angular.module("Controller",[])
         };
     }, true);
 
+    $scope.items = [{id: 0,label: 'Selecciones una opción'},
+                    {id: 1,label: 'Respuesta breve'},
+                    {id: 2,label: 'Casillas de verificación en letras'},
+                    {id: 3,label: 'Casillas de verificación en numeros 1-5'},
+                    {id: 4,label: 'Casillas de verificación en numeros 1-10'}];
+
+    $scope.Category = $scope.items[0];
+    $scope.EditQestion = false;
+
     angular.extend($scope,{
-        save: function(){
-            $scope.create($scope.CreateData,'question',$scope.poll,$scope.section);
+        save: function(option){
+            $scope.CreateData.question.category = $scope.Category.id;
+
+            if ($scope.Category.id == 0) {
+                $scope.CreateData.question.category = '';
+            }
+            if (option) {
+                $scope.create($scope.CreateData,'question',$scope.poll,$scope.section);
+            }else{
+                $scope.update($scope.CreateData,'question',$scope.CreateData.question.id,$scope.poll,$scope.section,true,$scope.index);
+            };
+
         },
         updateList: function(obj){
             angular.forEach(obj,function(value,index){
@@ -245,10 +296,25 @@ angular.module("Controller",[])
         destroy: function(obj,objs){
             var index = $scope.getQuestion.indexOf(obj);
             $scope.delete('question',obj.id,$scope.poll,$scope.section,index);
-            $scope.info('recurso','El','elimino');
+            $scope.info('recurso','El','eliminó');
         },
         reload: function(){
             $scope.getAll('question','',$scope.poll,$scope.section);
+        },
+        edit: function(obj){
+            $scope.index = $scope.getQuestion.indexOf(obj);
+            $scope.EditQestion = true;
+            $scope.CreateData.question.description = obj.attributes.description;
+            $scope.CreateData.question.id = obj.attributes.id;
+            $scope.CreateData.question.rank = obj.attributes.rank;
+            $scope.Category = $scope.items[obj.attributes.category];
+        },
+        cancel: function(){
+            $scope.CreateData.question.description = '';
+            $scope.CreateData.question.id = '';
+            $scope.CreateData.question.category = '';
+            $scope.Category = $scope.items[0];
+            $scope.EditQestion = false;
         }
     });
 

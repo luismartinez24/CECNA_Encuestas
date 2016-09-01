@@ -1,4 +1,5 @@
 <div class="row center" ng-controller="polls" ng-cloak>
+	<%= render "partials/alerts" %>
 	<div class="row">
 		<div class="col s12">
 			<ul class="tabs">
@@ -6,53 +7,72 @@
 				<li class="tab col s3"><a href="#test2"><i class="material-icons">playlist_add</i> Nueva encuesta</a></li>
 			</ul>
 		</div>
-		<div id="test1" class="col m12">
-			<div ng-repeat="obj in getPolls">
-				<div class="col m6">
-					<div class="card">
-						<div class="card-image waves-effect waves-block waves-light" style="background:#26a69a; height: 80px;">
-							<i class="medium material-icons paddingcard">assignment</i>
-						</div>
-						<div class="card-content">
-							<span class="white-text activator grey-text text-darken-3"><strong>{{ obj.attributes.title | limitTo: 40 }}{{ obj.attributes.title.length > 40 ? '...' : '' }}</strong><i class="material-icons right">more_vert</i></span>
-							<p style="text-align: left;">Código:  {{ obj.attributes.code }}</p>
-							<span ng-if="date(obj.attributes.expires_at)">
-								<p class="red lighten-2" style="text-align: left; border-radius: 0.4em;">Fecha de expiración: {{ obj.attributes.expires_at | date:'MM-dd-yyyy'}}</p>
-							</span>
-							<span ng-if="!date(obj.attributes.expires_at)">
-								<p style="text-align: left; border-radius: 0.4em;">Fecha de expiración: {{ obj.attributes.expires_at | date:'MM-dd-yyyy'}}</p>
-							</span>
-						</div>
-						<div class="card-action">
-							<div class="row">
-								<center>
-									<div class="col m6">
-										<span ng-if="obj.attributes.status == 0">
-											<p class="amber lighten-1 ticket">En edición</p>
-										</span>
-										<span ng-if="obj.attributes.status == 1">
-											<p class="green lighten-1 ticket" >Activa</p>
-										</span>
-										<span ng-if="obj.attributes.status == 2">
-											<p class="deep-orange darkn-1 ticket">Cancelada</p>
-										</span>
-										<span ng-if="obj.attributes.status == 3">
-											<p class="blue-grey lighten-3 ticket">Desacticada</p>
-										</span>
+		<div id="test1">
+			<div infinite-scroll='nextPage()' infinite-scroll-disabled='busy' infinite-scroll-distance='2'>
+				<div class="row">
+					<div ng-repeat='obj in getPolls'>
+						<div class="col s12 m12 l6">
+							<div class="card">
+								<div class="card-image waves-effect waves-block waves-light" style="background:{{ obj.attributes.color }}; height: 80px;">
+									<i class="medium material-icons paddingcard">assignment</i>
+								</div>
+								<div class="card-content">
+									<span class="white-text activator grey-text text-darken-3"><strong>{{ obj.attributes.title | limitTo: 40 }}{{ obj.attributes.title.length > 40 ? '...' : '' }}</strong><i class="material-icons right">more_vert</i></span>
+									<p style="text-align: left;">Código:  {{ obj.attributes.code }}</p>
+									<span ng-if="date(obj.attributes.expires_at)">
+										<p class="red lighten-2" style="text-align: left; border-radius: 0.4em;">Fecha de expiración: {{ obj.attributes.expires_at | date:'MM-dd-yyyy'}}</p>
+									</span>
+									<span ng-if="!date(obj.attributes.expires_at)">
+										<p style="text-align: left; border-radius: 0.4em;">Fecha de expiración: {{ obj.attributes.expires_at | date:'MM-dd-yyyy'}}</p>
+									</span>
+								</div>
+								<div class="card-action">
+									<div class="row">
+										<center>
+											<div class="col m6">
+												<span ng-if="obj.attributes.status == 0">
+													<p class="amber lighten-1 ticket">En edición</p>
+												</span>
+												<span ng-if="obj.attributes.status == 1">
+													<p class="green lighten-1 ticket" >Activa</p>
+												</span>
+												<span ng-if="obj.attributes.status == 2">
+													<p class="deep-orange darkn-1 ticket">Cancelada</p>
+												</span>
+												<span ng-if="obj.attributes.status == 3">
+													<p class="blue-grey lighten-3 ticket">Desacticada</p>
+												</span>
+											</div>
+											<div class="col m6">
+												<div class="chip">
+													{{ obj.attributes.created_at | timeAgo}}
+												</div>
+											</div>
+										</center>
 									</div>
-									<div class="col m6">
-										<div class="chip">
-											{{ obj.attributes.created_at | timeAgo}}
-										</div>
+								</div>
+								<div class="card-reveal">
+									<span class="card-title grey-text text-darken-4">Detalles de la encuesta<i class="material-icons right">close</i></span>
+									<div class="collection">
+										<a href="/encuestas/{{ obj.id }}" class="collection-item">Ver<span class="badge"><i class="material-icons">visibility</i></span></a>
+										<a href="/encuestas/{{ obj.id }}/secciones" class="collection-item">Secciones<span class="badge"><i class="material-icons">input</i></span></a>
 									</div>
-								</center>
+								</div>
 							</div>
 						</div>
-						<div class="card-reveal">
-							<span class="card-title grey-text text-darken-4">Detalles de la encuesta<i class="material-icons right">close</i></span>
-							<div class="collection">
-								<a href="/encuestas/{{ obj.id }}" class="collection-item">Ver<span class="badge"><i class="material-icons">visibility</i></span></a>
-								<a href="/encuestas/{{ obj.id }}/secciones" class="collection-item">Secciones<span class="badge"><i class="material-icons">input</i></span></a>
+					</div>					
+				</div>
+				<div ng-show='reloadScroll'>
+					<div class="preloader-wrapper big active toploading">
+						<div class="spinner-layer spinner-green-only" style="border-color: #455a64;">
+							<div class="circle-clipper left">
+								<div class="circle"></div>
+							</div>
+							<div class="gap-patch">
+								<div class="circle"></div>
+							</div>
+							<div class="circle-clipper right">
+								<div class="circle"></div>
 							</div>
 						</div>
 					</div>
@@ -60,46 +80,39 @@
 			</div>
 		</div>
 		<div id="test2" class="col s12">
-
-		<div class="card-panel white">
-			<p> Nueva encuesta </p>
-			<form ng-submit="save(CreateData)">
-
-				<div class="input-field">
-					<label for="name" class="">Titulo</label>
-					<input type="text" name="title" ng-model="CreateData.poll.title">
-				</div>
-				<code>{{ errorMessages.title[0] }}</code>
-
-				<p> Descripción </p>
-				<%= cktext_area :poll, :description, :cols => 40, :id => "ckeditor", :name => "ckeditor", :class => "ckeditor", :value => 'Describa de forma clara aspectos que caracterizan la encuesta a aplicar', :ckeditor => {} %>
-				<code>{{ errorMessages.description[0] }}</code>
-				<br />
-
-				<div class="row">
-					<div class="col s6">
-						<div class="input-field">
-							<label for="name" class="">Fecha de expiración</label>
-							<input type="date" class="datepicker" ng-model="CreateData.poll.expires_at">
-						</div>
-						<code>{{ errorMessages.expires_at[0] }}</code>
+			<div class="card-panel white">
+				<p> Nueva encuesta </p>
+				<form ng-submit="save(CreateData)">
+					<div class="input-field">
+						<label for="name" class="">Titulo</label>
+						<input type="text" name="title" ng-model="CreateData.poll.title">
 					</div>
-					<div class="col s6">
-						<div style="padding-top:5%;padding-left:20%">
-							<label for="name" class="">Tema: </label>
-							<input id='colorpicker' ng-model="CreateData.poll.color"/>
+					<code>{{ errorMessages.title[0] }}</code>
+					<p> Descripción </p>
+					<%= cktext_area :poll, :description, :cols => 40, :id => "ckeditor", :name => "ckeditor", :class => "ckeditor", :value => '', :ckeditor => {} %>
+					<code>{{ errorMessages.description[0] }}</code>
+					<br />
+					<div class="row">
+						<div class="col s6">
+							<div class="input-field">
+								<label for="name" class="">Fecha de expiración</label>
+								<input type="date" class="datepicker" ng-model="CreateData.poll.expires_at">
+							</div>
+							<code>{{ errorMessages.expires_at[0] }}</code>
 						</div>
-						<code>{{ errorMessages.color[0] }}</code>
+						<div class="col s6">
+							<div style="padding-top:5%;padding-left:20%">
+								<label for="name" class="">Tema: </label>
+								<input id='colorpicker' ng-model="CreateData.poll.color"/>
+							</div>
+							<code>{{ errorMessages.color[0] }}</code>
+						</div>
 					</div>
-				</div>
-
-				<div class="submit">
-					<button type="submit" class="btn waves-effect waves-light" value="Go!">Guardar <i class="mdi-content-send right"></i></button>
-				</div>
-
-			</form>
-		</div>
-
+					<div class="submit">
+						<button type="submit" class="btn waves-effect waves-light" value="Go!">Guardar <i class="mdi-content-send right"></i></button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,12 +1,12 @@
 class Api::V1::MyPollsController < Api::V1::MasterApiController
     before_action :auth, only: [:create]
-    before_action :set_poll, only: [:show]
+    before_action :set_poll, only: [:show,:update]
 
     def index
         if params[:option] == 'user'
-            @polls = MyPoll.where(user_id: @current_user)
+            @polls = MyPoll.where(user_id: @current_user).paginate(:page => params[:page], :per_page => 20).created_at
         else
-            @polls = MyPoll.all
+            @polls = MyPoll.all.paginate(:page => params[:page], :per_page => 20)
         end
     end
     def show
@@ -19,11 +19,22 @@ class Api::V1::MyPollsController < Api::V1::MasterApiController
             error_array!(@poll.errors,:unprocessable_entity)
         end
     end
+    def update
+        if @poll.user == @current_user
+            if @poll.update(my_polls_params)
+                render template: "api/v1/my_polls/show"
+            else
+                error_array!(@poll.errors,:unprocessable_entity)
+            end
+        else
+            error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)
+        end
+    end
 
     private
 
     def my_polls_params
-        params.require(:poll).permit(:title,:description,:expires_at,:color,:status,:option)
+        params.require(:poll).permit(:title,:description,:expires_at,:color,:status)
     end
     def set_poll
         if params[:option] == 'code'

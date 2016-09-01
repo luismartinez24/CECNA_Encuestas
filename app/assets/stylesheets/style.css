@@ -39,6 +39,10 @@ code{
     height: 32px;
     line-height: 32px;
 }
+.toploading{
+    margin-top: 15%;
+    margin-bottom: 15%;
+}
 .white-text {
     color: #FFFFFF !important;
 }

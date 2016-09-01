@@ -13,6 +13,8 @@ class MyPoll < ActiveRecord::Base
     before_create :generate_code
     before_save :default_values
 
+    scope :created_at, ->{ order("created_at DESC") }
+
     def default_values
         self.status ||= 0
     end

@@ -35,22 +35,27 @@
 			<div as-sortable-item-handle class="as-sortable-item-handle" style="height:50px">
 				<div class="file-field input-field">
 					<div class="row">
-						<div class="col s9">
+						<div class="col s8">
 							<div class="btn disabled">
 								<span><i class="large material-icons">open_with</i></span>
 							</div>
 							<div class="file-path-wrapper">
-								<input class="file-path" type="text" placeholder="Upload one or more files" ng-model="obj.attributes.name">
+								<input class="file-path style-cecna" type="text" placeholder="name" ng-model="obj.attributes.name" style="color: black;font-size: 17px;"  disabled>
 							</div>
 						</div>
-						<div class="col s3">
+						<div class="col s4">
 							<div class="row">
-								<div class="col s6">
+								<div class="col s4">
 									<div class="btn green lighten-1">
-										<span ng-click="questions(obj)"><i class="large material-icons">live_help</i></span>
+										<span><a ng-href="/encuestas/{{poll}}/secciones/{{ obj.attributes.id }}" style="color: white;"><i class="large material-icons">live_help</i></a></span>
 									</div>
 								</div>
-								<div class="col s6">
+								<div class="col s4">
+									<div class="btn yellow darken-2">
+										<span ng-click="edit(obj)"><i class="large material-icons">mode_edit</i></span>
+									</div>
+								</div>
+								<div class="col s4">
 									<div class="btn red  darken-2">
 										<span ng-click="destroy(obj,getSection)"><i class="large material-icons">delete</i></span>
 									</div>
@@ -63,17 +68,24 @@
 		</li>
 	</ul>
 	<br >
-	<form name="form.sectionForm" novalidate="" ng-submit="save(CreateData)">
 		<div class="input-field">
 			<i class="material-icons prefix">toc</i>
 			<input type="text" ng-model="CreateData.section.name">
-			<label for="icon_telephone">Sección</label>
 		</div>
 		<code>{{ errorMessages.name[0] }}</code>
 		<center>
-			<button class="btn waves-effect waves-light">Agregar
-				<i class="material-icons right">playlist_add</i>
-			</button>
+			<span ng-hide="EditSection">
+				<button class="btn waves-effect waves-light" ng-click="save(true)">Agregar
+					<i class="material-icons right">playlist_add</i>
+				</button>
+			</span>
+			<span ng-show="EditSection">
+				<button class="btn waves-effect waves-light" ng-click="save()">Editar
+					<i class="material-icons right">mode_edit</i>
+				</button>
+				<button class="btn waves-effect waves-light" ng-click="cancel()">Cancelar
+					<i class="material-icons right">shuffle</i>
+				</button>
+			</span>
 		</center>
-	</form>
 </div>

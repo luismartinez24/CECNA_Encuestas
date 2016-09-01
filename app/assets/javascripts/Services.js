@@ -55,7 +55,15 @@ angular.module("ToDoService",[])
 
 				if (entity == 'poll') {
 					poll.save(data, function(data){
-
+						$scope.success(ToDoService,$timeout,data);
+						$scope.CreateData.poll.title = '';
+						$scope.CreateData.poll.description = '';
+						$("#colorpicker").spectrum("set","#26a69a");
+						CKEDITOR.instances['ckeditor'].setData('Describa de forma clara aspectos que caracterizan la encuesta a aplicar');
+						$scope.CreateData.poll.expires_at = new Date();
+						var $input = $('.datepicker').pickadate();
+						var picker = $input.pickadate('picker');
+						picker.set('select', new Date(), { format: 'yyyy-mm-dd' });
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -92,15 +100,28 @@ angular.module("ToDoService",[])
 					question.save({'polls':id1,'sections':id2},data, function(data){
 						$scope.success(ToDoService,$timeout,data);
 						$scope.getQuestion.push(data.data);
-						$scope.CreateData.question.description = '';
+						$scope.cancel();
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
 			},
-			update: function(data,entity,id1,id2,id3){
+			update: function(data,entity,id1,id2,id3,option,index){
 				if (entity == 'section') {
 					section.update({'sections':id1,'polls':id2},data, function(data){
+						if (option) {
+							$scope.info('sección','La','actualizó');
+							$scope.cancel();
+							$scope.getSection[index] = data.data;
+						};
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
+
+				if (entity == 'poll') {
+					poll.update({'polls':id2},data, function(data){
+						$scope.info('encuesta','La','actualizó');
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -108,6 +129,11 @@ angular.module("ToDoService",[])
 
 				if (entity == 'question') {
 					question.update({'sections':id3,'polls':id2,'questions':id1},data, function(data){
+						if (option) {
+							$scope.info('pregunta','La','actualizó');
+							$scope.cancel();
+							$scope.getQuestion[index] = data.data;
+						};
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -142,10 +168,24 @@ angular.module("ToDoService",[])
 					});
 				};
 			},
-			getAll: function(entity,option,id1,id2){
+			getAll: function(entity,option,id1,id2,page){
 				if (entity == 'Encuestas') {
-					poll.query({'option':option}, function(data){
-						$scope.getPolls =  data.data;
+					poll.query({'option':option,'page':page}, function(data){
+						$timeout(function(){
+							if (page == 1) {
+								$scope.getPolls = data.data;
+							}else{
+								angular.forEach(data.data,function(value,index){
+									$scope.getPolls.push(value);
+								});
+							};
+							if (data.data.length > 0) {
+								$scope.busy = false;
+							}else{
+								$scope.busy = true;
+							};
+							$scope.reloadScroll = false;
+						}, 3000);
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -165,10 +205,19 @@ angular.module("ToDoService",[])
 					});
 				};
 			},
-			getEntity: function(entity,id,option,search){
+			getEntity: function(entity,id,option,search,edit){
 				if (entity == 'poll') {
 					poll.get({'polls': id,'option':option}, function(data){
 						$scope.pollData = data.data.attributes;
+						if (edit) {
+							$scope.ckeditorConfig();
+							$scope.UpdateData.poll = data.data.attributes;
+							CKEDITOR.instances['ckeditor'].setData($scope.UpdateData.poll.description);
+							$("#colorpicker").spectrum("set",$scope.UpdateData.poll.color);
+							var $input = $('.datepicker').pickadate();
+						var picker = $input.pickadate('picker');
+							picker.set('select', $scope.UpdateData.poll.expires_at, { format: 'yyyy-mm-dd' });
+						}
 						if (search) {
 							var url = '/contestar?option=';
 							window.location.href = url.concat(id);
@@ -248,6 +297,23 @@ angular.module("ToDoService",[])
 				json.plotOptions = plotOptions;
 
 				$('#'+vid).highcharts(json);
+			}
+		});
+	},
+	this.config = function($scope){
+		angular.extend($scope,{
+			ckeditorConfig: function(){
+				try{
+				var editor = CKEDITOR.instances.ckeditor;
+				if (editor) {
+					editor.destroy(true);
+				}
+				CKEDITOR.replace("ckeditor",{
+					uiColor: '#455a64',
+					toolbar: 'mini'
+				});
+				}catch(e){
+				}
 			}
 		});
 	}
