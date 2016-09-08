@@ -21,7 +21,8 @@ angular.module("Factories",[])
 		query: { method:'GET', isArray: false },
 		save: {method:'POST'},
 		update: {method:'PUT'},
-		get: {method:'GET', params:{id:'@id'}, isArray:false}
+		get: {method:'GET', params:{id:'@id'}, isArray:false},
+		remove: {method:'DELETE'},
 	});
 }])
 .factory("section", ['$resource','Constants' ,function($resource,Constants){

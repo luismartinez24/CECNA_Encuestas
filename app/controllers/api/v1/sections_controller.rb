@@ -9,11 +9,19 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
 
     def create
         if @poll.user == @current_user
-            @section = @poll.sections.new(sections_params)
-            if @section.save
-                 render template: "api/v1/sections/show"
+            if @resolve.blank? && @poll.status == 0
+                @section = @poll.sections.new(sections_params)
+                if @section.save
+                     render template: "api/v1/sections/show"
+                else
+                    error_array!(@section.errors,:unprocessable_entity)
+                end
             else
-                error_array!(@section.errors,:unprocessable_entity)
+                if @poll.status != 0
+                    error!("La encuesta no esta en edición, no puede agregar una nueva sección, Verifique las restricciones de la encuesta",:unprocessable_entity)
+                else
+                    error!("La encuesta ha sido contestada, no puede agregar una nueva sección, Verifique las restricciones de la encuesta",:unprocessable_entity)
+                end                
             end
         else
             error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)
@@ -22,25 +30,41 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
 
     def update
         if @poll.user == @current_user
-            if @section.update(sections_params)
-                render template: "api/v1/sections/show"
+            if (@resolve.blank? && @poll.status == 0)  || params[:option] == 'rank'
+                if @section.update(sections_params)
+                    render template: "api/v1/sections/show"
+                else
+                    error_array!(@section.errors,:unprocessable_entity)
+                end
             else
-                error_array!(@section.errors,:unprocessable_entity)
+                if @poll.status != 0
+                    error!("La encuesta no esta en edición, no puede actualizar esta sección, Verifique las restricciones de la encuesta",:unprocessable_entity)
+                else
+                    error!("La encuesta ha sido contestada, no puede actualizar esta sección, Verifique las restricciones de la encuesta",:unprocessable_entity)
+                end
             end
         else
-            error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)
+            error!("No tienes autorizado actualizar este recurso",:unauthorized)
         end
     end
 
     def destroy
         if @poll.user == @current_user
-            if @section.destroy
-                head :ok
+            if @resolve.blank?
+                if @poll.status == 0
+                    if @section.destroy
+                        head :ok
+                    else
+                        error_array!(@section.errors,:unprocessable_entity)
+                    end
+                else
+                    error!("La encuesta no esta en edición, no puede eliminar esta sección, Verifique las restricciones de la encuesta",:unprocessable_entity)
+                end
             else
-                error_array!(@section.errors,:unprocessable_entity)
+                error!("La encuesta ha sido contestada, no puede eliminar esta sección, Verifique las restricciones de la encuesta",:unprocessable_entity)
             end
         else
-            error!("No tienes autorizado agregar secciones a esta encuesta",:unauthorized)
+            error!("No tienes autorizado eliminar este recurso",:unauthorized)
         end
     end
 #----------
@@ -50,6 +74,8 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
         @poll = MyPoll.find_by_id(params[:poll_id])
         if @poll.blank?
             error!("Recurso no encontrado",:not_found)
+        else
+            @resolve = Competitor.where(my_poll_id:@poll.id).first
         end
     end
 
@@ -61,6 +87,10 @@ class Api::V1::SectionsController < Api::V1::MasterApiController
     end
 
     def sections_params
-        params.require(:section).permit(:name,:rank)
+        if params[:option] == 'rank'
+            params.require(:section).permit(:rank,:option)
+        else
+            params.require(:section).permit(:name,:rank,:option)
+        end
     end
 end

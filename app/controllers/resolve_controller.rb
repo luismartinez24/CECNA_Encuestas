@@ -7,9 +7,13 @@ class ResolveController < ApplicationController
 	private
 
 	def set_poll
-		@poll = MyPoll.where(code: params[:option]).first
+		@poll = MyPoll.where(code: params[:option],status: 1).first
 		if @poll.blank?
 			redirect_to('/')
+		else
+			if !@poll.is_valid?
+				redirect_to('/')
+			end
 		end
 	end
 end

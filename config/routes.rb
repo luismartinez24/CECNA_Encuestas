@@ -12,7 +12,7 @@ Rails.application.routes.draw do
             delete "/logout", to: "sessions#destroy"
             resources :sessions, only: [:create]
             resources :users, only: [:index, :show]
-            resources :polls, controller: "my_polls", only: [:index, :show, :create, :update] do
+            resources :polls, controller: "my_polls", only: [:index, :show, :create, :update, :destroy] do
                 resources :competitors, only: [:create]
                 resources :sections, only: [:index, :create, :update, :destroy] do
                     resources :questions, only: [:index, :create, :update, :destroy] do

@@ -7,7 +7,7 @@ class CreateMyPolls < ActiveRecord::Migration
       t.text :description
       t.string :code
       t.string :color
-      t.integer :status #0->en edicion, 1->activa, 2->cancelada, 3->desacticada
+      t.integer :status #0->en edicion, 1->activa, 2->finalizada
       t.timestamps null: false
     end
     add_foreign_key :my_polls, :users

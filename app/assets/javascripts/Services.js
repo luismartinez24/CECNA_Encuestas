@@ -14,7 +14,7 @@ angular.module("ToDoService",[])
 				$scope.errorMessages = '';
 				$timeout(function(){
 				ToDoService.msg($scope,$timeout, ToDoService);
-				}, 3000);
+				}, 4000);
 			},
 			success: function(ToDoService,$timeout,data){
 				$scope.msgsuccess = false;
@@ -36,8 +36,27 @@ angular.module("ToDoService",[])
 				};
 				if (data.status == 422 || data.status == 404) {
 					$scope.errorMessages = data.data.errors;
+					if (data.data.errors[0]) {
+						$scope.msginfo = false;
+						$scope.msg = data.data.errors[0];
+						$scope.msgclose($timeout, ToDoService);
+						$scope.errorMessages = data.data.errors;
+					}
 				};
-			},
+			}
+		});
+	},
+	this.list = function($scope){
+		angular.extend($scope,{
+			typeQuestion: [{id: 0,label: 'Selecciones una opción'},
+						{id: 1,label: 'Respuesta breve'},
+						{id: 2,label: 'Casillas de verificación en letras'},
+						{id: 3,label: 'Casillas de verificación en numeros 1-5'},
+						{id: 4,label: 'Casillas de verificación en numeros 1-10'}],
+			statusPoll: [{id: 0,label: 'En edición'},
+						{id: 1,label: 'Activa'},
+						{id: 2,label: 'Finalizada'}]
+
 		});
 	},
 	this.http = function($scope,$timeout, ToDoService){
@@ -64,6 +83,7 @@ angular.module("ToDoService",[])
 						var $input = $('.datepicker').pickadate();
 						var picker = $input.pickadate('picker');
 						picker.set('select', new Date(), { format: 'yyyy-mm-dd' });
+						$scope.reloadPoll();
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -108,8 +128,8 @@ angular.module("ToDoService",[])
 			},
 			update: function(data,entity,id1,id2,id3,option,index){
 				if (entity == 'section') {
-					section.update({'sections':id1,'polls':id2},data, function(data){
-						if (option) {
+					section.update({'sections':id1,'polls':id2,'option':option},data, function(data){
+						if (option == true) {
 							$scope.info('sección','La','actualizó');
 							$scope.cancel();
 							$scope.getSection[index] = data.data;
@@ -120,7 +140,7 @@ angular.module("ToDoService",[])
 				};
 
 				if (entity == 'poll') {
-					poll.update({'polls':id2},data, function(data){
+					poll.update({'polls':id2,'option':option},data, function(data){
 						$scope.info('encuesta','La','actualizó');
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
@@ -128,7 +148,7 @@ angular.module("ToDoService",[])
 				};
 
 				if (entity == 'question') {
-					question.update({'sections':id3,'polls':id2,'questions':id1},data, function(data){
+					question.update({'sections':id3,'polls':id2,'questions':id1,'option':option},data, function(data){
 						if (option) {
 							$scope.info('pregunta','La','actualizó');
 							$scope.cancel();
@@ -139,7 +159,20 @@ angular.module("ToDoService",[])
 					});
 				};
 			},
-			delete: function(entity,id1,id2,id3,index){
+			delete: function(entity,id1,id2,id3,index,option){
+				if (entity == 'poll') {
+					poll.remove({'polls':id1,'option':option}, function(data) {
+						$scope.info('recurso','El','elimino');
+						if (option != 'poll') {
+							$scope.getAll('section','',id1);
+							$scope.getEntity('poll',id1,'','',true);
+						}else{
+							window.location.href = '/encuestas';
+						}
+					}, function(data){
+						$scope.errorsData(data,ToDoService,$timeout);
+					});
+				};
 				if (entity == 'section') {
 					section.remove({'sections':id1,'polls':id2}, function(data) {
 						$scope.getSection.splice(index, 1);
@@ -149,8 +182,9 @@ angular.module("ToDoService",[])
 						angular.forEach($scope.getSection,function(value,index){
 							$scope.update(value.attributes,'section',value.id,id2);
 						});
+						$scope.info('recurso','El','elimino');
 					}, function(data){
-						$scope.errors(data,ToDoService,$timeout);
+						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
 
@@ -163,8 +197,9 @@ angular.module("ToDoService",[])
 						angular.forEach($scope.getQuestion,function(value,index){
 							$scope.update(value.attributes,'question',value.id,id2,id3);
 						});
+						$scope.info('recurso','El','eliminó');
 					}, function(data){
-						$scope.errors(data,ToDoService,$timeout);
+						$scope.errorsData(data,ToDoService,$timeout);
 					});
 				};
 			},
@@ -184,7 +219,7 @@ angular.module("ToDoService",[])
 							}else{
 								$scope.busy = true;
 							};
-							$scope.reloadScroll = false;
+							$scope.reloadList = false;
 						}, 3000);
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
@@ -193,6 +228,7 @@ angular.module("ToDoService",[])
 				if (entity == 'section') {
 					section.query({'option':option,'polls':id1}, function(data){
 						$scope.getSection =  data.data;
+						$scope.reloadList = false;
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -200,6 +236,7 @@ angular.module("ToDoService",[])
 				if (entity == 'question') {
 					question.query({'option':option,'polls':id1,'sections':id2}, function(data){
 						$scope.getQuestion =  data.data;
+						$scope.reloadList = false;
 					}, function(data){
 						$scope.errorsData(data,ToDoService,$timeout);
 					});
@@ -210,6 +247,7 @@ angular.module("ToDoService",[])
 					poll.get({'polls': id,'option':option}, function(data){
 						$scope.pollData = data.data.attributes;
 						if (edit) {
+							$scope.Status = $scope.statusPoll[$scope.pollData.status];
 							$scope.ckeditorConfig();
 							$scope.UpdateData.poll = data.data.attributes;
 							CKEDITOR.instances['ckeditor'].setData($scope.UpdateData.poll.description);

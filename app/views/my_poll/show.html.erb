@@ -2,7 +2,8 @@
 	<div class="nav-wrapper">
 		<div class="col s12">
 			<a href="/encuestas" class="breadcrumb">Encuestas</a>
-			<a class="breadcrumb"><%= @poll.title %></a>
+			<a class="breadcrumb"><%= @poll.title %> código <%= @poll.code %></a>
+			<a href="/encuestas/<%= @poll.id %>/secciones" class="breadcrumb">Ir a Secciones</a>
 		</div>
 	</div>
 </nav>
@@ -16,10 +17,10 @@
 			<ul class="tabs">
 				<li class="tab col s3"><a class="active" href="#test1"><i class="material-icons">list</i> Gestión de la encuesta</a></li>
 				<li class="tab col s3"><a href="#test2"><i class="material-icons">visibility</i> Pre visualización</a></li>
-				<li class="tab col s3"><a href="#test3"><i class="material-icons">assessment</i> Resultados (<%= @competitors %>)</a></li>
+				<li class="tab col s3"><a href="#test3"><i class="material-icons">assessment</i> Resultados ({{ pollData.competitors }})</a></li>
 			</ul>
 		</div>
-		<div id="test1" class="col s12">
+		<div id="test1" class="col s12" style="padding: 0;">
 			<div class="col s12">
 				<ul class="tabs">
 					<li class="tab col s3"><a class="active" href="#test4"><i class="material-icons">settings</i> Configuración de encuesta</a></li>
@@ -27,12 +28,69 @@
 				</ul>
 			</div>
 			<div id="test4" class="col s12">
-				
+				<div class="card-panel white">
+					<form>
+						<div class="row">
+							<div class="col s12 m12 l6">
+								<div class="container">
+									<div class="row">
+										<label class="headers_form">Estado de la encuesta</label>
+									</div>
+									<div class="row">
+										<select class="browser-default inputselect" ng-options="item.label for item in statusPoll" ng-model="Status"></select>
+										<code>{{ errorMessages.category[0] }}</code>
+									</div>
+									<div class="row">
+										<a class="waves-effect waves-light btn" ng-click="edit(UpdateData,'state')"><i class="material-icons right">done</i>Guardar</a>
+									</div>
+									<div class="row">
+										<h4>Código: <%= @poll.code %></h4>
+									</div>
+								</div>
+							</div>
+							<div class="col s12 m12 l6">
+								<div class="container">
+									<div class="row">
+										<label class="headers_form">Acciones</label>
+									</div>
+									<div class="row">
+										<a ng-click="destroy('competitor')" class="waves-effect waves-light btn red left rowspace"><i class="material-icons right">person_pin</i>Borrar participaciones 	({{ pollData.competitors }})  </a>
+									</div>
+									<div class="row">
+										<a ng-click="destroy('structure')" class="waves-effect waves-light btn red left rowspace"><i class="material-icons right">view_list</i>Borrar estructura</a>
+									</div>
+									<div class="row">
+										<a ng-click="destroy('poll')" class="waves-effect waves-light btn red left rowspace"><i class="material-icons right">view_list</i>Borrar encuesta</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="container">
+								<h5>Acciones</h5>
+								<p><code class="code">*</code><strong>Borrar participaciones:</strong> esta opción borra todas las participaciones de esta encuesta, dejando sin respuestas la encuesta.</p>
+								<p><code class="code">*</code><strong>Borrar estructura:</strong> borra todas las preguntas y secciones agregadas a la encuesta, solo si esta aun no ha sido contestada.</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="container">
+								<h5>Restricciones</h5>
+								<p><code class="code">*</code>Los participante tendran acceso a la encuesta cuando este activa, darle acceso mediante el <strong>código</strong> de la encuesta.</p>
+								<p><code class="code">*</code>Los participantes no tendran acceso a la encuesta si esta <strong>expirada</strong>.</p>
+								<p><code class="code">*</code>La encuesta solo puede ser actualizada en edición.</p>
+								<p><code class="code">*</code>No puede actualizar la encuesta si ya tiene al menos <strong>una participación</strong>.</p>
+								<p><code class="code">*</code>No se puede crear nuevas secciones o preguntas si la encuesta no esta en edición o tiene al menos <strong>una participación</strong></p>
+								<p><code class="code">*</code>No se pueden eliminar y actualizar secciones o preguntas si la encuesta ya tiene al menos <strong>una participación</strong>, para poder realizar estas actividades debe de borrar las respuesta en esta encuesta.</p>
+								<p><code class="code">*</code>No se pueden eliminar y actualizar secciones o preguntas a menos que la encuesta este en <strong>edición</strong>.</p>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 			<div id="test5" class="col s12">
 				<div class="card-panel white">
 					<p> Editar encuesta </p>
-					<form ng-submit="edit(UpdateData)">
+					<form ng-submit="edit(UpdateData,'')">
 						<div class="input-field">
 							<label for="name" class="">Titulo</label>
 							<input type="text" name="title" ng-model="UpdateData.poll.title">
@@ -148,7 +206,7 @@
 			<center>
 				<i class="large material-icons">person_pin</i>
 				<h3>
-					( <%= @competitors %> ) Participantes
+					( {{ pollData.competitors }} ) Participantes
 				</h3>
 			</center>
 			<span ng-repeat="obj in getSection">

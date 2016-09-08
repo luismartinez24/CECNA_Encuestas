@@ -18,156 +18,159 @@
 		<input id="section" type="hidden" value="<%= @section.id %>">
 	</blockquote>
 	<div class="row">
-	<center>
-	<br>
-	<ul as-sortable="sortableOptions" ng-model="getQuestion">
-		<span ng-if="getQuestion.length == 0">
-			<div class="card-panel brown lighten-2"><span class="white-text text-darken-2"><center><b>No se ha agregado ninguna pregunta</b></center></span></div>
-		</span>
-		<span ng-if="getQuestion.length > 0">
-			<div class="card-panel brown lighten-2"><span class="white-text text-darken-2">
-				<div class="row">
-					<center>
-						<span class="flow-text">
-							<a class="waves-effect waves-light btn" ng-click="reload()"><i class="material-icons right">replay</i>Recargar</a>
-							<a class="waves-effect waves-light btn" ng-click="updateList(getQuestion)"><i class="material-icons right">clear_all</i>Editar secciones</a>
-						</span>
-					</center>
-				</div>
-			</div>
-		</span>
-		<li ng-repeat="obj in getQuestion" as-sortable-item class="as-sortable-item">
-			<div as-sortable-item-handle class="as-sortable-item-handle" style="height:50px">
-				<div class="file-field input-field">
-					<div class="row">
-						<div class="col s9">
-							<div class="btn disabled">
-								<span><i class="large material-icons">open_with</i></span>
-							</div>
-							<div class="file-path-wrapper">
-								<input class="file-path style-cecna" type="text" placeholder="Description" ng-model="obj.attributes.description" style="color: black;font-size: 17px;" disabled>
-							</div>
+		<center>
+			<br>
+			<ul as-sortable="sortableOptions" ng-model="getQuestion">
+				<span ng-if="getQuestion.length == 0">
+					<div class="card-panel brown lighten-2"><span class="white-text text-darken-2"><center><b>No se ha agregado ninguna pregunta</b></center></span></div>
+				</span>
+				<span ng-if="getQuestion.length > 0">
+					<div class="card-panel brown lighten-2"><span class="white-text text-darken-2">
+						<div class="row">
+							<center>
+								<span class="flow-text">
+									<a class="waves-effect waves-light btn" ng-click="reload()"><i class="material-icons right">replay</i>Recargar</a>
+									<a class="waves-effect waves-light btn" ng-click="updateList(getQuestion)"><i class="material-icons right">clear_all</i>Editar secciones</a>
+								</span>
+							</center>
 						</div>
-						<div class="col s3">
+					</div>
+					<div class="row">
+						<%= render "partials/loading" %>
+					</div>
+				</span>
+				<li ng-repeat="obj in getQuestion" as-sortable-item class="as-sortable-item">
+					<div as-sortable-item-handle class="as-sortable-item-handle" style="height:50px">
+						<div class="file-field input-field">
 							<div class="row">
-								<div class="col s6">
-									<div class="btn green lighten-1">
-										<span ng-click="edit(obj)"><i class="large material-icons">mode_edit</i></span>
+								<div class="col s9">
+									<div class="btn disabled">
+										<span><i class="large material-icons">open_with</i></span>
+									</div>
+									<div class="file-path-wrapper">
+										<input class="file-path style-cecna" type="text" placeholder="Description" ng-model="obj.attributes.description" style="color: black;font-size: 17px;" disabled>
 									</div>
 								</div>
-								<div class="col s6">
-									<div class="btn red  darken-2">
-										<span ng-click="destroy(obj,getQuestion)"><i class="large material-icons">delete</i></span>
+								<div class="col s3">
+									<div class="row">
+										<div class="col s6">
+											<div class="btn green lighten-1">
+												<span ng-click="edit(obj)"><i class="large material-icons">mode_edit</i></span>
+											</div>
+										</div>
+										<div class="col s6">
+											<div class="btn red  darken-2">
+												<span ng-click="destroy(obj,getQuestion)"><i class="large material-icons">delete</i></span>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<br >
-		<div class="card" style="width:80%; height:350px">
-			<div class="card-content">
-				<span class="card-title">Agregar pregunta</span>
-				<form>
-					<div class="input-field">
-						<i class="material-icons prefix">toc</i>
-						<input type="text" ng-model="CreateData.question.description" style="color: black;font-size: 17px;">
-						<code>{{ errorMessages.description[0] }}</code>
-					</div>
-					<div class="row">
-						<div class="input-field col s6">
-							<label>Tipo de pregunta</label>
-							<br>
-							<br>
-							<select class="browser-default inputselect" ng-options="item.label for item in items" ng-model="Category"></select>
-							<code>{{ errorMessages.category[0] }}</code>
+				</li>
+			</ul>
+			<br >
+			<div class="card" style="width:80%; height:350px">
+				<div class="card-content">
+					<span class="card-title">Agregar pregunta</span>
+					<form>
+						<div class="input-field">
+							<i class="material-icons prefix">toc</i>
+							<input type="text" ng-model="CreateData.question.description" style="color: black;font-size: 17px;">
+							<code>{{ errorMessages.description[0] }}</code>
 						</div>
-						<div class="input-field col s6" style="margin-top: 50px;">
-							<span ng-if="Category.id == 1">
-								<label>Texto de respuesta breve...</label>
-							</span>
-							<span ng-if="Category.id == 2">
-								<p>
-									<input type="checkbox" id="test8"  checked="checked" disabled="disabled" />
-									<label for="test8">Excelente</label>
+						<div class="row">
+							<div class="input-field col s6">
+								<label>Tipo de pregunta</label>
+								<br>
+								<br>
+								<select class="browser-default inputselect" ng-options="item.label for item in typeQuestion" ng-model="Category"></select>
+								<code>{{ errorMessages.category[0] }}</code>
+							</div>
+							<div class="input-field col s6" style="margin-top: 50px;">
+								<span ng-if="Category.id == 1">
+									<label>Texto de respuesta breve...</label>
+								</span>
+								<span ng-if="Category.id == 2">
+									<p>
+										<input type="checkbox" id="test8"  checked="checked" disabled="disabled" />
+										<label for="test8">Excelente</label>
 
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">M. Bueno</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">M. Bueno</label>
 
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">Bueno</label>
-								</p>
-								<p>
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">Regular</label>
-								</p>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">Bueno</label>
+									</p>
+									<p>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">Regular</label>
+									</p>
 
-							</span>
-							<span ng-if="Category.id == 3">
-								<input type="checkbox" id="test8" disabled="disabled" />
-								<label for="test8">1</label>
-								<input type="checkbox" id="test8" checked="checked"  disabled="disabled" />
-								<label for="test8">2</label>
-								<input type="checkbox" id="test8" disabled="disabled" />
-								<label for="test8">3</label>
-								<input type="checkbox" id="test8" disabled="disabled" />
-								<label for="test8">4</label>
-								<input type="checkbox" id="test8" disabled="disabled" />
-								<label for="test8">5</label>
-							</span>
-							<span ng-if="Category.id == 4">
-								<p>
+								</span>
+								<span ng-if="Category.id == 3">
 									<input type="checkbox" id="test8" disabled="disabled" />
 									<label for="test8">1</label>
-									<input type="checkbox" id="test8" disabled="disabled" />
+									<input type="checkbox" id="test8" checked="checked"  disabled="disabled" />
 									<label for="test8">2</label>
 									<input type="checkbox" id="test8" disabled="disabled" />
 									<label for="test8">3</label>
-									<input type="checkbox" id="test8" checked="checked" disabled="disabled" />
+									<input type="checkbox" id="test8" disabled="disabled" />
 									<label for="test8">4</label>
 									<input type="checkbox" id="test8" disabled="disabled" />
 									<label for="test8">5</label>
-								</p>
-								<p>
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">6</label>
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">7</label>
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">8</label>
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">9</label>
-									<input type="checkbox" id="test8" disabled="disabled" />
-									<label for="test8">10</label>
-								</p>
-							</span>
+								</span>
+								<span ng-if="Category.id == 4">
+									<p>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">1</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">2</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">3</label>
+										<input type="checkbox" id="test8" checked="checked" disabled="disabled" />
+										<label for="test8">4</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">5</label>
+									</p>
+									<p>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">6</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">7</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">8</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">9</label>
+										<input type="checkbox" id="test8" disabled="disabled" />
+										<label for="test8">10</label>
+									</p>
+								</span>
+							</div>
 						</div>
-					</div>
-					<span ng-hide="EditQestion">
-						<button class="btn waves-effect waves-light" ng-click="save(true)">Agregar
-							<i class="material-icons right">playlist_add</i>
-						</button>
-					</span>
-					<span ng-show="EditQestion">
-						<button class="btn waves-effect waves-light" ng-click="save()">Editar
-							<i class="material-icons right">mode_edit</i>
-						</button>
-						<button class="btn waves-effect waves-light" ng-click="cancel()">Cancelar
-							<i class="material-icons right">shuffle</i>
-						</button>
-					</span>
-				</form>
-			</div>
+						<span ng-hide="EditQestion">
+							<button class="btn waves-effect waves-light" ng-click="save(true)">Agregar
+								<i class="material-icons right">playlist_add</i>
+							</button>
+						</span>
+						<span ng-show="EditQestion">
+							<button class="btn waves-effect waves-light" ng-click="save()">Editar
+								<i class="material-icons right">mode_edit</i>
+							</button>
+							<button class="btn waves-effect waves-light" ng-click="cancel()">Cancelar
+								<i class="material-icons right">shuffle</i>
+							</button>
+						</span>
+					</form>
+				</div>
 <!--             <div class="card-action">
               <a href="#">This is a link</a>
               <a href="#">This is a link</a>
-            </div> -->
-		</div>
-	</center>
-	</div>
+          </div> -->
+      </div>
+  </center>
+</div>
 </div>
 <script type="text/javascript">	
 	$(document).ready(function() {

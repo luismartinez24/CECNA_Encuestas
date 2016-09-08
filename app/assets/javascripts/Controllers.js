@@ -12,7 +12,7 @@ angular.module("Controller",[])
     angular.extend($scope, {
         signin: function() {
             $scope.loading = true;
-            auth.login({'username':$scope.AuthData.username,'password':$scope.AuthData.password})
+            auth.login({'username':$scope.AuthData.username,'password':$scope.AuthData.password,'system':'seem'})
             .success(function(data) {
                $scope.create(data,'Login');
             })
@@ -61,7 +61,7 @@ angular.module("Controller",[])
     $scope.ckeditorConfig();
     $scope.page = 0;
     $scope.busy = false;
-    $scope.reloadScroll = true;
+    $scope.reloadList = true;
     CKEDITOR.instances['ckeditor'].setData('Describa de forma clara aspectos que caracterizan la encuesta a aplicar');
 
     angular.extend($scope,{
@@ -79,6 +79,12 @@ angular.module("Controller",[])
             if (current > expired) {
                 return true;
             };
+        },
+        reloadPoll: function(){
+            $scope.page = 0;
+            $scope.busy = false;
+            $scope.reloadList = true;
+            $scope.nextPage();
         }
     });
 
@@ -91,7 +97,7 @@ angular.module("Controller",[])
         },
         nextPage: function(){
             $scope.busy = true;
-            $scope.reloadScroll = true;
+            $scope.reloadList = true;
             $scope.page++;
             $scope.getAll('Encuestas','user',ToDoService,$timeout,$scope.page);
         }
@@ -104,6 +110,7 @@ angular.module("Controller",[])
     ToDoService.http($scope,$timeout,ToDoService);
     ToDoService.graph($scope,$timeout,ToDoService);
     ToDoService.config($scope);
+    ToDoService.list($scope);
 
     angular.extend($scope,{
         poll: document.getElementById("id").value,
@@ -155,9 +162,13 @@ angular.module("Controller",[])
             };
             $scope.bar(title,id,category,array);
         },
-        edit: function(obj){
+        edit: function(obj,option){
             obj.poll.description =  CKEDITOR.instances['ckeditor'].getData();
-            $scope.update(obj,'poll','',obj.poll.id);
+            obj.poll.status = $scope.Status.id;
+            $scope.update(obj,'poll','',obj.poll.id,'',option);
+        },
+        destroy: function(option){
+            $scope.delete('poll',$scope.poll,'','','',option);
         }
     });
 
@@ -185,6 +196,7 @@ angular.module("Controller",[])
 
     $scope.getAll('section','',$scope.poll);
     $scope.EditSection = false;
+    $scope.reloadList = true;
 
     $scope.$watch("getSection",function ( newValue, oldValue ) {
         if ($scope.getSection != null) {
@@ -203,22 +215,20 @@ angular.module("Controller",[])
             };
         },
         updateList: function(obj){
+            $scope.cancel();
             angular.forEach(obj,function(value,index){
-                $scope.update(value.attributes,'section',value.id,$scope.poll);
+                $scope.update(value.attributes,'section',value.id,$scope.poll,'','rank');
             });
             $scope.info('posición','La','actualizó');
         },
         destroy: function(obj,objs){
             var index = $scope.getSection.indexOf(obj);
             $scope.delete('section',obj.id,$scope.poll,index);
-            $scope.info('recurso','El','elimino');
         },
         reload: function(){
+            $scope.cancel();
+            $scope.reloadList = true;
             $scope.getAll('section','',$scope.poll);
-        },
-        questions: function(obj){
-            var url = '/encuestas/'+$scope.poll+'/secciones/';
-            window.location.href = url.concat(obj.attributes.id);
         },
         edit: function(obj){
             $scope.index = $scope.getSection.indexOf(obj);
@@ -239,6 +249,7 @@ angular.module("Controller",[])
 
     ToDoService.msg($scope,$timeout, ToDoService);
     ToDoService.http($scope,$timeout,ToDoService);
+    ToDoService.list($scope);
 
     angular.extend($scope,{
         CreateData:{
@@ -264,14 +275,9 @@ angular.module("Controller",[])
         };
     }, true);
 
-    $scope.items = [{id: 0,label: 'Selecciones una opción'},
-                    {id: 1,label: 'Respuesta breve'},
-                    {id: 2,label: 'Casillas de verificación en letras'},
-                    {id: 3,label: 'Casillas de verificación en numeros 1-5'},
-                    {id: 4,label: 'Casillas de verificación en numeros 1-10'}];
-
-    $scope.Category = $scope.items[0];
+    $scope.Category = $scope.typeQuestion[0];
     $scope.EditQestion = false;
+    $scope.reloadList = true;
 
     angular.extend($scope,{
         save: function(option){
@@ -288,17 +294,19 @@ angular.module("Controller",[])
 
         },
         updateList: function(obj){
+            $scope.cancel();
             angular.forEach(obj,function(value,index){
-                $scope.update(value.attributes,'question',value.id,$scope.poll,$scope.section);
+                $scope.update(value.attributes,'question',value.id,$scope.poll,$scope.section,'rank');
             });
             $scope.info('posición','La','actualizó');
         },
         destroy: function(obj,objs){
             var index = $scope.getQuestion.indexOf(obj);
             $scope.delete('question',obj.id,$scope.poll,$scope.section,index);
-            $scope.info('recurso','El','eliminó');
         },
         reload: function(){
+            $scope.reloadList = true;
+            $scope.cancel();
             $scope.getAll('question','',$scope.poll,$scope.section);
         },
         edit: function(obj){
@@ -307,13 +315,13 @@ angular.module("Controller",[])
             $scope.CreateData.question.description = obj.attributes.description;
             $scope.CreateData.question.id = obj.attributes.id;
             $scope.CreateData.question.rank = obj.attributes.rank;
-            $scope.Category = $scope.items[obj.attributes.category];
+            $scope.Category = $scope.typeQuestion[obj.attributes.category];
         },
         cancel: function(){
             $scope.CreateData.question.description = '';
             $scope.CreateData.question.id = '';
             $scope.CreateData.question.category = '';
-            $scope.Category = $scope.items[0];
+            $scope.Category = $scope.typeQuestion[0];
             $scope.EditQestion = false;
         }
     });

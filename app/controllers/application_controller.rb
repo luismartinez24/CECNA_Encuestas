@@ -29,4 +29,8 @@ class ApplicationController < ActionController::Base
         response.status = status
         render template: "api/v1/errors"
     end
+
+    def not_found
+        raise ActionController::RoutingError.new('Not Found')
+    end
 end

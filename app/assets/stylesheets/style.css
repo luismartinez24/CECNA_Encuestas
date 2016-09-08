@@ -7,6 +7,10 @@
 code{
     color: red;
 }
+.headers_form {
+    font-size: 20px;
+    font-weight: 500;
+}
 .large-padding {
     padding: 10px 15px;
 }
@@ -25,6 +29,9 @@ code{
 .paddingcard{
     padding-top: 10px;
     padding-bottom: 0px;
+}
+.rowspace{
+    left: 20px;
 }
 .text-center {
     text-align: center !important;

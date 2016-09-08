@@ -30,6 +30,9 @@
 					</center>
 				</div>
 			</div>
+			<div class="row">
+				<%= render "partials/loading" %>
+			</div>
 		</span>
 		<li ng-repeat="obj in getSection" as-sortable-item class="as-sortable-item">
 			<div as-sortable-item-handle class="as-sortable-item-handle" style="height:50px">
@@ -68,24 +71,24 @@
 		</li>
 	</ul>
 	<br >
-		<div class="input-field">
-			<i class="material-icons prefix">toc</i>
-			<input type="text" ng-model="CreateData.section.name">
-		</div>
-		<code>{{ errorMessages.name[0] }}</code>
-		<center>
-			<span ng-hide="EditSection">
-				<button class="btn waves-effect waves-light" ng-click="save(true)">Agregar
-					<i class="material-icons right">playlist_add</i>
-				</button>
-			</span>
-			<span ng-show="EditSection">
-				<button class="btn waves-effect waves-light" ng-click="save()">Editar
-					<i class="material-icons right">mode_edit</i>
-				</button>
-				<button class="btn waves-effect waves-light" ng-click="cancel()">Cancelar
-					<i class="material-icons right">shuffle</i>
-				</button>
-			</span>
-		</center>
+	<div class="input-field">
+		<i class="material-icons prefix">toc</i>
+		<input type="text" ng-model="CreateData.section.name">
+	</div>
+	<code>{{ errorMessages.name[0] }}</code>
+	<center>
+		<span ng-hide="EditSection">
+			<button class="btn waves-effect waves-light" ng-click="save(true)">Agregar
+				<i class="material-icons right">playlist_add</i>
+			</button>
+		</span>
+		<span ng-show="EditSection">
+			<button class="btn waves-effect waves-light" ng-click="save()">Editar
+				<i class="material-icons right">mode_edit</i>
+			</button>
+			<button class="btn waves-effect waves-light" ng-click="cancel()">Cancelar
+				<i class="material-icons right">shuffle</i>
+			</button>
+		</span>
+	</center>
 </div>

@@ -19,6 +19,10 @@ class MyPoll < ActiveRecord::Base
         self.status ||= 0
     end
 
+    def is_valid?
+        DateTime.now < self.expires_at
+    end
+
     def generate_code
         begin
             self.code = SecureRandom.hex(5)
